@@ -5,8 +5,8 @@ var ids = {
 		callbackURL: 'http://127.0.0.1:1337/auth/facebook/callback'
 	},
 	twitter: {
-		consumerKey: 'get_your_own',
-		consumerSecret: 'get_your_own',
+		consumerKey: 'yxDatKN48oYTeKqOft5ciA',
+		consumerSecret: '9xwrzRwL2D53iXTxNQ8hSQ95TydiJo2n5dGzkBHYXBI',
 		callbackURL: "http://127.0.0.1:1337/auth/twitter/callback"
 	},
 	github: {
