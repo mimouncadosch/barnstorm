@@ -45,19 +45,3 @@ userSchema.methods.hashPassword = function(password) {
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', userSchema);
-
-
-
-
-
-
-
-// create a user model
-var User = mongoose.model('User', {
-  oauthID: Number,
-  name: String,
-  created: Date
-});
-
-
-module.exports = User;
