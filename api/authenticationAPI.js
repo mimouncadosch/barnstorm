@@ -1,6 +1,7 @@
 // ./api/authenticationAPI.js
 
 require('./../config/passport.js');
+require('passport');
 /*
  * Backend routes for handling AUTHENTICATION, LOGIN, SIGNUP, & LOGOUT
  */
@@ -10,15 +11,15 @@ module.exports = function(app, passport) {
 	// TWITTER //
 	////////////
 
-	// route for facebook authentication and login
-	app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
+	// // route for facebook authentication and login
+	// app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
 
-	// handle the callback after facebook has authenticated the user
-	app.get('/auth/twitter/callback',
-		passport.authenticate('twitter', {
-			successRedirect : '/profile',
-			failureRedirect : '/'
-		}));
+	// // handle the callback after facebook has authenticated the user
+	// app.get('/auth/twitter/callback',
+	// 	passport.authenticate('twitter', {
+	// 		successRedirect : '/profile',
+	// 		failureRedirect : '/'
+	// 	}));
 
 
 	// =====================================
