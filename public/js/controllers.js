@@ -5,17 +5,7 @@
 angular.module('myApp.controllers', []).
 	controller('AppCtrl', function ($scope, $http) {
 
-		$scope.getTweets = function() {
-			$http({
-				method: 'GET',
-				url: '/api/gettweets'
-			}).success(function (data, status, headers, config) {
-				console.log(data);
-
-			}).error(function (data, status, headers, config) {
-				console.log(data);
-			});			
-		}
+		
 
 	}).
 	controller('MyCtrl1', function ($scope, $http) {
@@ -32,7 +22,18 @@ angular.module('myApp.controllers', []).
 
 
 	}).
-	controller('MyCtrl2', function ($scope) {
+	controller('MyCtrl2', function ($scope, $http) {
 	// write Ctrl here
+		$scope.getTweets = function() {
+			$http({
+				method: 'GET',
+				url: '/api/gettweets'
+			}).success(function (data, status, headers, config) {
+				$scope.tweets = data;
+				console.log($scope.tweets);
+			}).error(function (data, status, headers, config) {
+				console.log(data);
+			});			
+		}
 
 	});

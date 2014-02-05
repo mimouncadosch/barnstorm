@@ -38,15 +38,11 @@ function getTweets(){
 		// 	res.json(myResult);
 		// })
 
-	var haimStatuses = {
-		data: []
-	};
-	T.get('statuses/user_timeline', { screen_name: '@HAIMtheband', count: 1000},  function (err, reply) {
-	      // console.log(reply);
-	      var result = reply;    
+	var haimStatuses = [];
+	T.get('statuses/user_timeline', { screen_name: '@HAIMtheband', count: 1000},  function (err, result) {
 	      for (var i = 0; i < result.length; i++) {
 	      	var item = result[i];
-	      	haimStatuses.data.push({ 
+	      	haimStatuses.push({ 
 	      		"content" : item.text,
 	      		"created_at"  : item.created_at,
 	      		"lang"       : item.lang 
