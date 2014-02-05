@@ -21,7 +21,6 @@ module.exports = function(app, passport) {
 			failureRedirect : '/'
 		}));
 
-
 	// =====================================
 	// AUTHENTICATION  =====================
 	// =====================================

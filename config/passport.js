@@ -17,6 +17,8 @@ passport.use(new TwitterStrategy({
   callbackURL: "http://127.0.0.1:3000/auth/twitter/callback" //http://tweetthepress.heroku.com/auth/twitter/callback
 },
   function(token, tokenSecret, profile, done) {
+  console.log(token);
+  console.log(tokenSecret);
   // User.findOrCreate({ twitterId: profile.id }, function (err, user) {
   //   return done(err, user);
   // });
