@@ -18,9 +18,6 @@ config(function ($routeProvider, $locationProvider) {
 		when('/view2', {
 			templateUrl: 'partials/partial2.html',
 			controller: 'MyCtrl2'
-		}).
-			otherwise({
-			redirectTo: '/view1'
 		});
 
 	$locationProvider.html5Mode(true);

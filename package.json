@@ -1,9 +1,11 @@
 {
-	"name": "application-name",
-	"version": "0.0.1",
-	"private"		: true,
-	"dependencies"	: {
-		"express": "*",
-		"natural": "*"
-	}
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "*",
+    "natural": "*",
+    "passport": "~0.2.0",
+    "passport-twitter": "~1.0.2"
+  }
 }
