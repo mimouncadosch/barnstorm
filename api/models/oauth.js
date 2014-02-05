@@ -8,6 +8,8 @@ var ids = {
 		consumerKey: 'yxDatKN48oYTeKqOft5ciA',
 		consumerSecret: '9xwrzRwL2D53iXTxNQ8hSQ95TydiJo2n5dGzkBHYXBI',
 		callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
+		// accessToken: "253580597-gmn5RLdmdpCQRLeBiVYo7vqqEsxRHz2bkeS1o2Vb",
+		// accessToKenSecret: "QuQvCxnXHFHV5EQM0DgOvG6CfLlyZtsoIANihDdGMI1yZ"
 	},
 	github: {
 		clientID: 'get_your_own',

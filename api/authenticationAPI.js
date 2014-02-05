@@ -12,14 +12,14 @@ module.exports = function(app, passport) {
 	////////////
 
 	// // route for facebook authentication and login
-	// app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
+	app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
 
-	// // handle the callback after facebook has authenticated the user
-	// app.get('/auth/twitter/callback',
-	// 	passport.authenticate('twitter', {
-	// 		successRedirect : '/profile',
-	// 		failureRedirect : '/'
-	// 	}));
+	// handle the callback after facebook has authenticated the user
+	app.get('/auth/twitter/callback',
+		passport.authenticate('twitter', {
+			successRedirect : '/',
+			failureRedirect : '/'
+		}));
 
 
 	// =====================================
@@ -48,9 +48,6 @@ module.exports = function(app, passport) {
 		req.logout();
 		res.redirect('/login');
 	});
-
-
-
 
 
 	////////////
@@ -76,44 +73,44 @@ module.exports = function(app, passport) {
 	// FACEBOOK //
 	///////////////
 
-	// route for facebook authentication and login
-	app.get('/api/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+	// // route for facebook authentication and login
+	// app.get('/api/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
-	// handle the callback after facebook has authenticated the user
-	app.get('/auth/facebook/callback',
-		passport.authenticate('facebook', {
-			successRedirect : '/profile',
-			failureRedirect : '/'
-		}));
+	// // handle the callback after facebook has authenticated the user
+	// app.get('/auth/facebook/callback',
+	// 	passport.authenticate('facebook', {
+	// 		successRedirect : '/profile',
+	// 		failureRedirect : '/'
+	// 	}));
 
-	// =====================================
-	// AUTHENTICATION  =====================
-	// =====================================
-	// we will want this protected so you have to be logged in to visit
-	// we will use route middleware to verify this (the isLoggedIn function)
+	// // =====================================
+	// // AUTHENTICATION  =====================
+	// // =====================================
+	// // we will want this protected so you have to be logged in to visit
+	// // we will use route middleware to verify this (the isLoggedIn function)
 
-	app.get('/api/isLoggedin', isLoggedIn, function(req, res) {
-		console.log('back-end profile page');
-		res.json(req.user);
-		console.log(req.user);
-		// get the user JSON object out of session and pass to template
-	});
+	// app.get('/api/isLoggedin', isLoggedIn, function(req, res) {
+	// 	console.log('back-end profile page');
+	// 	res.json(req.user);
+	// 	console.log(req.user);
+	// 	// get the user JSON object out of session and pass to template
+	// });
 
-	app.get('/api/notAuthenticated', function(req, res) {
-		res.status(401);
-		res.end();
-	})
+	// app.get('/api/notAuthenticated', function(req, res) {
+	// 	res.status(401);
+	// 	res.end();
+	// })
 
 
 
-	// =====================================
-	// LOGOUT ==============================
-	// =====================================
-	app.get('/api/logout', function(req, res) {
-		console.log("logging out");
-		req.logout();
-		res.redirect('/login');
-	});
+	// // =====================================
+	// // LOGOUT ==============================
+	// // =====================================
+	// app.get('/api/logout', function(req, res) {
+	// 	console.log("logging out");
+	// 	req.logout();
+	// 	res.redirect('/login');
+	// });
 
 };
 

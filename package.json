@@ -10,6 +10,9 @@
     "passport-facebook": "~1.0.2",
     "passport-github": "~0.1.5",
     "passport-google": "~0.3.0",
-    "request": "~2.33.0"
+    "request": "~2.33.0",
+    "mongoose": "~3.8.6",
+    "bcrypt-nodejs": "0.0.3",
+    "twit": "~1.1.12"
   }
 }

@@ -1,32 +1,34 @@
 var oauth = require('./models/oauth.js');
 var request = require('request');
 
-
+var request = require('request');
 module.exports = function(app, passport) {
 
-	app.get('/api/gettweet', getTweets, function(req, res) {
+	// app.get('/api/gettweets', getTweets());
+	app.get('/api/gettweets', getTweets());
+
+}
+
+
+function getTweets(){
+
+	return function(req, res){
+		// get url string and convert to json object
+		// var query = req._parsedUrl.query;
+		// var objParams = queryString.parse(query);
+
+		//grab params and set defaults
+		// var query = objParams.q;
 		console.log('calling function to get tweets');
-		res.json(getTweets());
-	});
+		var url = "https://api.twitter.com/1.1/search/tweets.json?q=haim";
+
+		request(url, function(err, result){
+			var myResult = JSON.parse(result.body);
+			res.json(myResult);
+		})
+	}
+
 }
-
-
-
-function getTweets(req, res){
-	// get url string and convert to json object
-	// var query = req._parsedUrl.query;
-	// var objParams = queryString.parse(query);
-
-	//grab params and set defaults
-	// var query = objParams.q;
-	var url = "https://api.twitter.com/1.1/search/tweets.json?q=haim";
-
-	request(url, function(err, result){
-		var myResult = JSON.parse(result.body);
-		res.json(myResult);
-	})
-}
-	
 
 
 // Get all the tweets within a radius
