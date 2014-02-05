@@ -4,7 +4,6 @@
 
 var express = require('express'),
 	passport = require('passport'),
-	TwitterStrategy = require('passport-twitter').Strategy,
 	api = require('./routes/api'),
 	http = require('http'),
 	path = require('path'),	

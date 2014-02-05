@@ -1,5 +1,6 @@
 // ./api/authenticationAPI.js
 
+require('./../config/passport.js');
 /*
  * Backend routes for handling AUTHENTICATION, LOGIN, SIGNUP, & LOGOUT
  */
