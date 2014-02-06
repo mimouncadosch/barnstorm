@@ -5,7 +5,6 @@
 var express = require('express'),
 	passport = require('passport'),
 	mongoose = require('mongoose'),
-	api = require('./api/twitterAPI'),
 	http = require('http'),
 	path = require('path'),	
 	port = process.env.PORT || 3000;
@@ -75,9 +74,15 @@ app.use("/lib", express.static(__dirname + "/public/lib"));
 // load user API and pass in our express app and fully configured passport
 require('./api/authenticationAPI.js')(app, passport);
 require('./api/twitterAPI')(app, passport);
+var nlp = require('./api/nlpAPI');
 
 // JSON API
 // app.get('/api/name', api.name);
+// app.get('/hello', nlp.sayHello);
+app.get('/dict', nlp.getSentiment);
+// app.get('/tokenize', nlp.tokenizeTweet);
+// app.get('/word', nlp.wordInDictionary);
+
 
 // route for facebook authentication and login
 // app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));

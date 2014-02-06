@@ -1,8 +1,9 @@
 var oauth = require('./models/oauth.js');
 var request = require('request');
 var queryString = require('querystring');
-var request = require('request');
 var Twit = require('twit');
+
+var nlp = require('./nlpAPI');
 
 var T = new Twit({
     consumer_key:         'yxDatKN48oYTeKqOft5ciA'
@@ -28,20 +29,29 @@ function getTweets(){
 		console.log(query);
 		console.log('calling function to get tweets');
 		
-	var haimStatuses = [];
-	T.get('statuses/user_timeline', { screen_name: query, count: 5},  function (err, result) {
-	      for (var i = 0; i < result.length; i++) {
-	      	var item = result[i];
-	      	haimStatuses.push({ 
-	      		"content" : item.text,
-	      		"created_at"  : item.created_at,
-	      		"lang"       : item.lang 
-	      	});
-	      };
-	      // console.log(haimStatuses);
+		T.get('statuses/user_timeline', { screen_name: query, count: 15},  function (err, result) {
+			for (var i = 0; i < result.length; i++) {
+				var item = result[i];
+	      	// console.log(result[i]);
+	      	// console.log(result[i].id);
+	      	console.log(result[i].text);
+	      	// console.log(result[i].user.name);
+	      	// console.log(result[i].user.screen_name);
+	      	// console.log(result[i].user.location);
+	      	// console.log(result[i].user.description);
+	      	// console.log(result[i].user.url);
+	      	// console.log(result[i].user.followers_count);
+	      	// console.log(result[i].created_at);
+	      	// console.log(result[i].user.profile_background_image_url);
+
+	      	console.log("Sentiment Score: ");
+	      	nlp.getSentiment(result[i].text);
+	      }
 	      console.log("total tweets: " + result.length);
-	      res.json(haimStatuses);
-	  });
+
+	      res.send("We're done");
+
+	  	});
 	}
 }
 
