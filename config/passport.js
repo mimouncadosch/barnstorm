@@ -8,17 +8,49 @@ GithubStrategy = require('passport-github').Strategy,
 GoogleStrategy = require('passport-google').Strategy;
 //var User = require('./user.js')
 var config = require('./../api/models/oauth.js')
-var User = require('../api/models/user');
+var User = require('../api/models/user.js');
 // config
 
-passport.use(new TwitterStrategy({
+module.exports = passport.use(new TwitterStrategy({
   consumerKey: "yxDatKN48oYTeKqOft5ciA",
   consumerSecret: "9xwrzRwL2D53iXTxNQ8hSQ95TydiJo2n5dGzkBHYXBI",
   callbackURL: "http://127.0.0.1:3000/auth/twitter/callback" //http://tweetthepress.heroku.com/auth/twitter/callback
 },
   function(token, tokenSecret, profile, done) {
-  console.log(token);
-  console.log(tokenSecret);
+    User.findOne({'twitter.id' :  profile.id}, function(err, user) { 
+      console.log('and whatd you find');
+      console.log(user);
+      if(err) { console.log(err); }
+      if (!err && user != null) {
+        console.log(user);
+        return done(null, user);
+      } else {
+        var user = new User({
+          twitter: {
+            id: profile.id,
+            token: token,
+            displayName: profile.displayName,
+            username: profile.username
+          },
+          created: Date.now()
+        });
+        user.save(function(err) {
+          if(err) {
+            console.log(err);
+          } else {
+            console.log("saving user ...");
+            console.log(user);
+            return done(null, user);
+          };
+        });
+      }
+    });
+  }
+));
+
+
+
+  
   // User.findOrCreate({ twitterId: profile.id }, function (err, user) {
   //   return done(err, user);
   // });
@@ -26,9 +58,8 @@ passport.use(new TwitterStrategy({
   // console.log(token);
   // console.log(tokenSecret);
 
-  return done(null, {myToken: token, myTokenSecret: tokenSecret, id: profile.id});
-  }
-));
+  //return done(null, {myToken: token, myTokenSecret: tokenSecret, id: profile.id});
+  
 
 
 module.exports = passport.use(new FacebookStrategy({

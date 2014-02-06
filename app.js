@@ -4,6 +4,7 @@
 
 var express = require('express'),
 	passport = require('passport'),
+	mongoose = require('mongoose'),
 	api = require('./api/twitterAPI'),
 	http = require('http'),
 	path = require('path'),	
@@ -11,6 +12,8 @@ var express = require('express'),
 
 
 var app = module.exports = express();
+var configDB= require('./config/database.js');
+mongoose.connect(configDB.url)
 
 /**
 Serialize & Deserialize User
@@ -89,30 +92,30 @@ app.get('/auth/twitter/callback',
 
 
 // redirect all others to the index (HTML5 history)
-app.get("/", function(req, res, next) {
+app.get("/*", function(req, res, next) {
 	res.sendfile("index.html", { root: __dirname + "/public" });
 });
 
 //======================================================
 // Twitter routing
 
-app.get('/auth/twitter',
-	// function(req, res, next) {
-	// 	console.log('test');
-	// 	res.end();
+// app.get('/auth/twitter',
+// 	// function(req, res, next) {
+// 	// 	console.log('test');
+// 	// 	res.end();
 
-	// 	//res.sendfile("index.html", { root: __dirname + "/public" });
-	// });
-passport.authenticate('twitter'));
+// 	// 	//res.sendfile("index.html", { root: __dirname + "/public" });
+// 	// });
+// passport.authenticate('twitter'));
 
-app.get('/auth/twitter/callback', 
-	passport.authenticate('twitter', { failureRedirect: '/login' }),
-	function(req, res) {
+// app.get('/auth/twitter/callback', 
+// 	passport.authenticate('twitter', { failureRedirect: '/login' }),
+// 	function(req, res) {
 		
-    // Successful authentication, redirect home.
-    console.log(req.user);
-    res.redirect('/home');
-});
+//     // Successful authentication, redirect home.
+//     console.log(req.user);
+//     res.redirect('/home');
+// });
 
 
 
