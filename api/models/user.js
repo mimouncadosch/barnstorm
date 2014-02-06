@@ -1,25 +1,43 @@
 // ./api/models/user.js
 
 // load the modules we need	
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt-nodejs');
 
 // define the schema for our user model
 var userSchema =  new Schema({
 	// GLOBALS
-	name	: String,
-	twitter_handle	: String,
+	facebook         : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    },
+    twitter          : {
+        id           : String,
+        token        : String,
+        displayName  : String,
+        username     : String
+    },
+    google           : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    },
+	created: Date
+	// ? position: String
 	
 	// NEEDED FOR PASSPORT AUTHORIZATION: http://passportjs.org/guide/profile/
-	provider: String,
-	displayName: String,
-	name: {
-		familyName: String,
-		givenName: String, 
-		middleName: String
-	},
-	emails: [{value: String, type: String}]
+	// provider: String,
+	// displayName: String,
+	// name: {
+	// 	familyName: String,
+	// 	givenName: String, 
+	// 	middleName: String
+	// },
+	// emails: [{value: String, type: String}]
 });
 
 

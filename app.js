@@ -4,12 +4,15 @@
 
 var express = require('express'),
 	passport = require('passport'),
+	mongoose = require('mongoose'),
 	http = require('http'),
 	path = require('path'),	
 	port = process.env.PORT || 3000;
 
 
 var app = module.exports = express();
+var configDB= require('./config/database.js');
+mongoose.connect(configDB.url)
 
 /**
 Serialize & Deserialize User
@@ -87,7 +90,7 @@ app.get('/dict', nlp.getSentiment);
 // handle the callback after facebook has authenticated the user
 app.get('/auth/twitter/callback',
 	passport.authenticate('twitter', {
-		successRedirect : '/profile',
+		successRedirect : '/dashboard',
 		failureRedirect : '/'
 	}));
 

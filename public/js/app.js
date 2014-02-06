@@ -11,18 +11,19 @@ angular.module('myApp', [
 ]).
 config(function ($routeProvider, $locationProvider) {
 	$routeProvider.
-		when('/view1', {
-			templateUrl: 'partials/partial1.html',
-			controller: 'MyCtrl1'
+		when('/landing', {
+			templateUrl: 'partials/landing.html',
+			controller: 'landingCtrl'
 		}).
-		when('/view2', {
-			templateUrl: 'partials/partial2.html',
-			controller: 'MyCtrl2'
+		when('/dashboard', {
+			templateUrl: 'partials/dashboard.html',
+			controller: 'dashboardCtrl'
 		}).
-		when('/view3', {
-			templateUrl: 'partials/partial3.html',
-			controller: 'MyCtrl3'
-		});
+		when('/profile', {
+			templateUrl: 'partials/profile.html',
+			controller: 'profileCtrl'
+		});//.
+		//otherwise({redirectTo:'/landing'});
 
 	$locationProvider.html5Mode(true);
 });
