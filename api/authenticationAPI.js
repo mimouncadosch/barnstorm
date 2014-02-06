@@ -17,7 +17,7 @@ module.exports = function(app, passport) {
 	// handle the callback after facebook has authenticated the user
 	app.get('/auth/twitter/callback',
 		passport.authenticate('twitter', {
-			successRedirect : '/',
+			successRedirect : '/dashboard',
 			failureRedirect : '/'
 		}));
 

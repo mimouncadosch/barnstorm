@@ -11,6 +11,10 @@ angular.module('myApp', [
 ]).
 config(function ($routeProvider, $locationProvider) {
 	$routeProvider.
+		when('/', {
+			templateUrl: 'partials/landing.html',
+			controller: 'landingCtrl'
+		}).
 		when('/landing', {
 			templateUrl: 'partials/landing.html',
 			controller: 'landingCtrl'
