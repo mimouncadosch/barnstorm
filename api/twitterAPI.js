@@ -1,8 +1,8 @@
 var oauth = require('./models/oauth.js');
 var request = require('request');
-
+var queryString = require('querystring');
 var request = require('request');
-var Twit = require('twit')
+var Twit = require('twit');
 
 var T = new Twit({
     consumer_key:         'yxDatKN48oYTeKqOft5ciA'
@@ -13,33 +13,24 @@ var T = new Twit({
 
 
 module.exports = function(app, passport) {
-
 	// app.get('/api/gettweets', getTweets());
 	app.get('/api/gettweets', getTweets());
-
 }
 
-
+// Pulls tweets based on a query
 function getTweets(){
 	return function(req, res){
 		// get url string and convert to json object
-		// var query = req._parsedUrl.query;
-		// var objParams = queryString.parse(query);
+		var query = req._parsedUrl.query;
+		var objParams = queryString.parse(query);
 
-		//grab params and set defaults
-		// var query = objParams.q;
+		// grab params and set defaults
+		var query = objParams.q;
+		console.log(query);
 		console.log('calling function to get tweets');
-		// console.log("req");
-		// console.log(req);
-		// var url = "https://api.twitter.com/1.1/search/tweets.json?q=haim";
-
-		// request(url, function(err, result){
-		// 	var myResult = JSON.parse(result.body);
-		// 	res.json(myResult);
-		// })
-
+		
 	var haimStatuses = [];
-	T.get('statuses/user_timeline', { screen_name: '@HAIMtheband', count: 1000},  function (err, result) {
+	T.get('statuses/user_timeline', { screen_name: query, count: 5},  function (err, result) {
 	      for (var i = 0; i < result.length; i++) {
 	      	var item = result[i];
 	      	haimStatuses.push({ 
@@ -54,7 +45,6 @@ function getTweets(){
 	  });
 	}
 }
-
 
 // Get all the tweets within a radius
 function getGeoTweets(req, res){
