@@ -9,8 +9,7 @@ var bcrypt = require('bcrypt-nodejs');
 var userSchema =  new Schema({
 	// GLOBALS
 	name	: String,
-	twitter_handle	: String
-	
+	twitter_handle	: String,
 	
 	// NEEDED FOR PASSPORT AUTHORIZATION: http://passportjs.org/guide/profile/
 	provider: String,

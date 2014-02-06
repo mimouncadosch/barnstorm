@@ -3,11 +3,32 @@
  */
 
 var express = require('express'),
-	api = require('./routes/api'),
+	passport = require('passport'),
+	api = require('./api/twitterAPI'),
 	http = require('http'),
-	path = require('path');
+	path = require('path'),	
+	port = process.env.PORT || 3000;
+
 
 var app = module.exports = express();
+
+/**
+Serialize & Deserialize User
+*/
+// Passport session setup.
+//   To support persistent login sessions, Passport needs to be able to
+//   serialize users into and deserialize users out of the session.  Typically,
+//   this will be as simple as storing the user ID when serializing, and finding
+//   the user by ID when deserializing.  However, since this example does not
+//   have a database of user records, the complete Twitter profile is serialized
+//   and deserialized.
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+	done(null, obj);
+});
 
 
 /**
@@ -17,9 +38,15 @@ var app = module.exports = express();
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.use(express.logger('dev'));
-app.use(express.bodyParser()); 	
+app.use(express.cookieParser()); // read cookies (needed for user authorization)
+app.use(express.bodyParser()); // get information from html forms
 app.use(express.methodOverride()); 	
 //app.use(app.router); – not sure if we need this
+// session secret: used to compute the hash for a session.
+// prevents session tampering
+app.use(express.session({ secret: 'eatSLEEPraveREPEAT'}));
+app.use(passport.initialize());
+app.use(passport.session()); // enables persistent login sessions
 
 // development only
 if (app.get('env') === 'development') {
@@ -31,7 +58,6 @@ if (app.get('env') === 'production') {
 	// TODO
 };
 
-
 /**
  * Routes
  */
@@ -42,19 +68,59 @@ app.use("/css", express.static(__dirname + "/public/css"));
 app.use("/partials", express.static(__dirname + "/public/partials"));
 app.use("/lib", express.static(__dirname + "/public/lib"));
 
+
+// load user API and pass in our express app and fully configured passport
+require('./api/authenticationAPI.js')(app, passport);
+require('./api/twitterAPI')(app, passport);
+
 // JSON API
-app.get('/api/name', api.name);
+// app.get('/api/name', api.name);
+
+// route for facebook authentication and login
+// app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
+
+// handle the callback after facebook has authenticated the user
+app.get('/auth/twitter/callback',
+	passport.authenticate('twitter', {
+		successRedirect : '/profile',
+		failureRedirect : '/'
+	}));
+
+
 
 // redirect all others to the index (HTML5 history)
-app.all("/*", function(req, res, next) {
+app.get("/", function(req, res, next) {
 	res.sendfile("index.html", { root: __dirname + "/public" });
 });
 
+//======================================================
+// Twitter routing
 
-/**
- * Start Server
- */
+app.get('/auth/twitter',
+	// function(req, res, next) {
+	// 	console.log('test');
+	// 	res.end();
 
-http.createServer(app).listen(app.get('port'), function () {
-	console.log('Express server listening on port ' + app.get('port'));
+	// 	//res.sendfile("index.html", { root: __dirname + "/public" });
+	// });
+passport.authenticate('twitter'));
+
+app.get('/auth/twitter/callback', 
+	passport.authenticate('twitter', { failureRedirect: '/login' }),
+	function(req, res) {
+		
+    // Successful authentication, redirect home.
+    console.log(req.user);
+    res.redirect('/home');
 });
+
+
+
+
+
+
+// launch ==============================================================================
+
+//In your browser, go to http://localhost:<port>
+app.listen(port);
+console.log("Listening on port " + port);
