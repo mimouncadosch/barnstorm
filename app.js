@@ -88,11 +88,11 @@ app.get('/dict', nlp.getSentiment);
 // app.get('/auth/twitter', passport.authenticate('twitter', { scope : 'email' }));
 
 // handle the callback after facebook has authenticated the user
-app.get('/auth/twitter/callback',
-	passport.authenticate('twitter', {
-		successRedirect : '/dashboard',
-		failureRedirect : '/'
-	}));
+// app.get('/auth/twitter/callback',
+// 	passport.authenticate('twitter', {
+// 		successRedirect : '/dashboard',
+// 		failureRedirect : '/'
+// 	}));
 
 
 

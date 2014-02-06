@@ -98,5 +98,14 @@ angular.module('myApp.controllers', []).
 
 	}).
 	controller('profileCtrl', function ($scope, $http) {
+
+		$http({
+			method: 'GET',
+			url: '/api/isLoggedin'
+		}).success(function (data, status, headers, config) {
+			$scope.user = data;
+		}).error(function (data, status, headers, config) {
+			console.log(data);
+		});			
 		
 	});
