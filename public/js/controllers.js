@@ -8,7 +8,7 @@ angular.module('myApp.controllers', []).
 		
 
 	}).
-	controller('MyCtrl1', function ($scope, $http) {
+	controller('landingCtrl', function ($scope, $http) {
 		// $scope.twitter = function(){
 		// 	$http({
 		// 		method: 'GET',
@@ -22,7 +22,7 @@ angular.module('myApp.controllers', []).
 
 
 	}).
-	controller('MyCtrl2', function ($scope, $http) {
+	controller('dashboardCtrl', function ($scope, $http) {
 	// write Ctrl here
 		$scope.getTweets = function() {
 			$http({
@@ -36,8 +36,6 @@ angular.module('myApp.controllers', []).
 			});			
 		}
 
-	}).
-	controller('MyCtrl3', function ($scope, $http) {
 		// write Ctrl here
 		var m = [80, 200, 80, 200]; // margins
 		var w = 1000 - m[1] - m[3]; // width
@@ -96,4 +94,9 @@ angular.module('myApp.controllers', []).
   			// Add the line by appending an svg:path element with the data line we created above
 			// do this AFTER the axes above so that the line is above the tick-lines
   			graph.append("svg:path").attr("d", line(data));
+
+
+	}).
+	controller('profileCtrl', function ($scope, $http) {
+		
 	});

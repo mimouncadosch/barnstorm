@@ -85,7 +85,7 @@ require('./api/twitterAPI')(app, passport);
 // handle the callback after facebook has authenticated the user
 app.get('/auth/twitter/callback',
 	passport.authenticate('twitter', {
-		successRedirect : '/profile',
+		successRedirect : '/dashboard',
 		failureRedirect : '/'
 	}));
 
