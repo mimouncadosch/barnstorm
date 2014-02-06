@@ -36,4 +36,8 @@ angular.module('myApp.controllers', []).
 			});			
 		}
 
+	}).
+	controller('MyCtrl3', function ($scope, $http) {
+	// write Ctrl here
+		
 	});
