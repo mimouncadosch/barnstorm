@@ -13,7 +13,6 @@ var T = new Twit({
 
 
 module.exports = function(app, passport) {
-	// app.get('/api/gettweets', getTweets());
 	app.get('/api/gettweets', getTweets());
 }
 
@@ -39,7 +38,7 @@ function getTweets(){
 	      		"lang"       : item.lang 
 	      	});
 	      };
-	      console.log(haimStatuses);
+	      // console.log(haimStatuses);
 	      console.log("total tweets: " + result.length);
 	      res.json(haimStatuses);
 	  });
