@@ -2,6 +2,8 @@ var fs = require('fs');
 var natural = require('natural');
 var tokenizer = new natural.WordTokenizer();
 var twitter = require('./twitterAPI');
+var mongoose = require('mongoose');
+var Tweet = require('./models/tweet.js');
 //var async = require('async');
 exports.sayHello = function(req, res){
 	// return function(req, res){
@@ -74,20 +76,37 @@ exports.getSentiment = function(req, res){
 				}
 				
 
-				var totalSentiment = 0;
+				// var totalSentiment = 0;
 
 				for (var i = 0; i < tweetsArray.length; i++) {
 					var text = tweetsArray[i].text;
 					var tokenizedTweet = tokenizeTweet(text);
 					var twitterScore = computeScore(tokenizedTweet);
-					totalSentiment += twitterScore;
+					console.log("TWITTER SCORE");
+					console.log(twitterScore);
+					// totalSentiment += twitterScore;
+
+
+					tweetsArray[i].sentiment = twitterScore;
 				};
 				
-				res.json(totalSentiment);
-				console.log(totalSentiment);
+				res.json(tweetsArray);
+				console.log(tweetsArray);
 
+				for (var i = 0; i < tweetsArray.length; i++) {
+					var newTweet = new Tweet(tweetsArray[i]);
+					newTweet.save();
+					console.log("tweet added: " + req.body);
+  					res.json(req.body);
+				};
 			}
 			//end of fs.readFile(...)
 		});
+}
 
+exports.saveTweets = function(req, res){
+	// var newTweet = new Tweet(req.body);
+ //  	newTweet.save();
+ //  	console.log("tweet added: " + req.body);
+ //  	res.json(req.body);
 }

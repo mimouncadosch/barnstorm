@@ -24,7 +24,7 @@ exports.getTweets = function(cb){
 	console.log('calling function to get tweets');
 
 	
-	T.get('statuses/user_timeline', { screen_name: "penn", count: 20},  function (err, results) {
+	T.get('statuses/user_timeline', { screen_name: "penn", count: 3},  function (err, results) {
 		var tweetArray = [];
 
 		for (var i = 0; i < results.length; i++) {
@@ -32,10 +32,10 @@ exports.getTweets = function(cb){
 			
 			var tweetObject = {
 				user: {
-					user_name: results[i].user.name,
-					user_screen_name: results[i].user.screen_name,
-					user_location: results[i].user.location,
-					user_url: results[i].user.url, 
+					name: results[i].user.name,
+					screen_name: results[i].user.screen_name,
+					location: results[i].user.location,
+					url: results[i].user.url, 
 					followers_count: results[i].user.followers_count, 
 					profile_background_image_url: results[i].user.profile_background_image_url, 
 				},
