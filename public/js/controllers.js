@@ -55,6 +55,7 @@ angular.module('myApp.controllers', []).
 				console.log(JS_date);
 				
 				parsedDates.push(JS_date);
+				
 			};
 
 			console.log("length: ");
