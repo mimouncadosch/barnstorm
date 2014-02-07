@@ -27,7 +27,7 @@ angular.module('myApp.controllers', []).
 		$scope.getTweets = function() {
 			$http({
 				method: 'GET',
-				url: '/api/gettweets'
+				url: '/dict'
 			}).success(function (data, status, headers, config) {
 				$scope.tweets = data;
 				console.log($scope.tweets);

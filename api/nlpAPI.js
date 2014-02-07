@@ -90,14 +90,15 @@ exports.getSentiment = function(req, res){
 					tweetsArray[i].sentiment = twitterScore;
 				};
 				
-				res.json(tweetsArray);
-				console.log(tweetsArray);
-
+				
 				for (var i = 0; i < tweetsArray.length; i++) {
 					var newTweet = new Tweet(tweetsArray[i]);	
 					newTweet.save();
 					console.log("tweet added");
 				};
+
+				res.json(tweetsArray);
+				console.log(tweetsArray);
 			}
 			//end of fs.readFile(...)
 		});
