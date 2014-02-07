@@ -75,11 +75,18 @@ app.use("/lib", express.static(__dirname + "/public/lib"));
 require('./api/authenticationAPI.js')(app, passport);
 var twitter = require('./api/twitterAPI');
 var nlp = require('./api/nlpAPI');
+var masterAPI = require('./api/masterAPI');
 
 // JSON API
-app.get('/dict', nlp.getSentiment);
-app.get('/api/gettweets', twitter.getTweets); // don't use
-app.get('/api/schedule', twitter.schedule);
+// app.get('/dict', nlp.getSentiment);
+app.get('/api/getTweets', masterAPI.getTweets); // don't use
+app.get('/api/getSentiment', masterAPI.getSentiment);
+// app.get('/api/schedule', twitter.schedule);
+// app.get('/api/test', masterAPI.getTweetsThenCalculateScore);
+app.get('/api/cronJob', masterAPI.cronJob);
+
+
+
 
 
 

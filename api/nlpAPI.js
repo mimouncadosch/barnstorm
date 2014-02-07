@@ -22,7 +22,6 @@ exports.getSentiment = function(req, res){
 		console.log("calling function to get sentiment");
 		console.log("REQ. QUERY");
 		console.log(req.query);
-
 		
 		// Create dictionary
 		fs.readFile(__dirname + '/nlp-dict.txt', 'utf-8' ,function (err, data) {
