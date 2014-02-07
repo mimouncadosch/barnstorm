@@ -27,15 +27,6 @@ exports.getTweets = function(req, cb){
 	console.log("REQ.USER");
 	console.log(req.user);
 
-	User.find( function(err, users){
-		console.log("USER FIND IS BEING CALLED");
-		console.log("USER :");
-		console.log(users);
-		for (var i = 0; i < users.length; i++) {
-			getTweets(users[i]);
-		};
-		// res.json(user);
-	});
 	
 	function getTweets(user) {
 		console.log("calling getTweets()");
@@ -74,20 +65,31 @@ exports.getTweets = function(req, cb){
 		
 
 
-exports.findUser = function(req, res){
-	console.log("is Find User being Called?");
-	console.log("REQ.USER");
-	console.log(req.user);
-	var username = req.user.twitter.username;
-	User.find( function(err, user){
-		console.log("USER FIND IS BEING CALLED");
-		console.log("USER :");
-		console.log(user);
-		// getTweets(user);
-		res.json(user);
-	});
-}
+exports.schedule = function(req, res){
+	// T.get('statuses/user_timeline', { screen_name: "penn" + " since:2014-02-02"},  function (err, results) {
+	// 	res.json(results);
+	// });
 
+	T.get('search/tweets', { q: '@pmarca'}, function(err, reply) {
+  		res.json(reply);
+	})
+
+
+	console.log("Schedule is Being Called");
+	console.log("DATE: ");
+	var d = new Date();
+	console.log(d.getDate());
+
+	var rule = new schedule.RecurrenceRule();
+	rule.minute = 50;
+
+	var j = schedule.scheduleJob(rule, function(){
+    	console.log('The answer to life, the universe, and everything!');
+
+    	//res.json("The answer to life, and universe, and everything");
+	});
+
+}
 
 // Get all the tweets within a radius
 // function getGeoTweets(req, res){
