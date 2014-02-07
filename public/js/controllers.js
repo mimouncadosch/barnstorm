@@ -28,7 +28,7 @@ angular.module('myApp.controllers', []).
 			console.log("calling getTweets in front end");
 			$http({
 				method: 'GET',
-				url: '/api/cronjobs',
+				url: '/api/cronJob?username=freeslugs',
 
 			}).success(function (data, status, headers, config) {
 				//$scope.tweets = data;
