@@ -4,7 +4,7 @@ var tokenizer = new natural.WordTokenizer();
 var twitter = require('./twitterAPI');
 var mongoose = require('mongoose');
 var Tweet = require('./models/tweet.js');
-// var schedule = require('node-schedule');
+var schedule = require('node-schedule');
 
 
 exports.sayHello = function(req, res){
@@ -37,8 +37,32 @@ exports.getSentiment = function(req, res){
 			};
 		// End of creating dictionary
 
+		//========= TIMED REQUEST FOR TWITTER =========
+
+		/** 
+		* THIS WORKS ==================================================
+		*/
+
+		// var rulesArray = [];
+		// for (var i = 0; i < 60; i++) {
+		// 	rulesArray.push(i);
+		// };
+
+		// for (var i = 0; i < rulesArray.length; i++) {
+		// 	var rule = new schedule.RecurrenceRule();
+		// 	schedule.scheduleJob(rule, function(){
+		// 		console.log('The answer to life, the universe, and everything!');
+		// 		var tweetsArray;
+		// 		twitter.getTweets(req, function(data) {
+		// 			tweetsArrayFunction(data);
+		// 		});
+		//     });
+		// };		
+
+		//==================================================
 
 
+			// ======= THIS WORKS ========
 			var tweetsArray;
 			twitter.getTweets(req, function(data) {
 				tweetsArrayFunction(data);
@@ -96,12 +120,21 @@ exports.getSentiment = function(req, res){
 				
 				
 				for (var i = 0; i < tweetsArray.length; i++) {
-					var newTweet = new Tweet(tweetsArray[i]);	
+					var newTweet = new Tweet(tweetsArray[i]);
+					console.log("HERE IS WHERE WE MAKE SURE THAT TWEETS HAVEN'T BEEN CREATED ALREADY");
+					// console.log(newTweet);
+					// var d = Date.parse(newTweet.created_at);
+					var date = new Date(newTweet.created_at);
+					var minutes = date.getMinutes();
+					var hour = date.getHour();
+					console.log("MINUTES: ");
+					console.log(minutes);
+					// if(newTweet.created_at)
 					newTweet.save();
 					console.log("tweet added");
 				};
 
-				res.json(tweetsArray);
+				// res.json(tweetsArray);
 				console.log(tweetsArray);
 			}
 			//end of fs.readFile(...)

@@ -27,6 +27,7 @@ exports.getTweets = function(req, cb){
 	console.log("REQ.USER");
 	console.log(req.user);
 
+		
 
 	User.find( function(err, users){
 		console.log("USER FIND IS BEING CALLED");
