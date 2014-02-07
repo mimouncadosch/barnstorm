@@ -4,7 +4,9 @@ var tokenizer = new natural.WordTokenizer();
 var twitter = require('./twitterAPI');
 var mongoose = require('mongoose');
 var Tweet = require('./models/tweet.js');
-//var async = require('async');
+// var schedule = require('node-schedule');
+
+
 exports.sayHello = function(req, res){
 	// return function(req, res){
 		console.log("HELLO");
@@ -17,7 +19,11 @@ var scores = [];
 
 exports.getSentiment = function(req, res){
 	
+
 		console.log("calling function to get sentiment");
+		console.log("REQ. QUERY");
+		console.log(req.query);
+
 		
 		// Create dictionary
 		fs.readFile(__dirname + '/nlp-dict.txt', 'utf-8' ,function (err, data) {
@@ -35,7 +41,7 @@ exports.getSentiment = function(req, res){
 
 
 			var tweetsArray;
-			twitter.getTweets(function(data) {
+			twitter.getTweets(req, function(data) {
 				tweetsArrayFunction(data);
 			});
 			
@@ -61,6 +67,7 @@ exports.getSentiment = function(req, res){
 					return -1;
 				}
 
+				// Calculates score of individual tweet
 				var computeScore = function(tweet){
 					var totalScore = 0;
 
@@ -76,15 +83,13 @@ exports.getSentiment = function(req, res){
 				}
 				
 
-				// var totalSentiment = 0;
-
+				// Computes score for all tweets in tweetsArray array
 				for (var i = 0; i < tweetsArray.length; i++) {
 					var text = tweetsArray[i].text;
 					var tokenizedTweet = tokenizeTweet(text);
 					var twitterScore = computeScore(tokenizedTweet);
 					console.log("TWITTER SCORE");
 					console.log(twitterScore);
-					// totalSentiment += twitterScore;
 
 
 					tweetsArray[i].sentiment = twitterScore;

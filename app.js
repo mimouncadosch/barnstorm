@@ -79,6 +79,7 @@ var nlp = require('./api/nlpAPI');
 // JSON API
 app.get('/dict', nlp.getSentiment);
 app.get('/api/gettweets', twitter.getTweets); // don't use
+app.get('/api/getuser', twitter.findUser);
 
 
 

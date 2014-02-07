@@ -13,6 +13,7 @@
     "request": "~2.33.0",
     "mongoose": "~3.8.6",
     "bcrypt-nodejs": "0.0.3",
-    "twit": "~1.1.12"
+    "twit": "~1.1.12",
+    "node-schedule": "~0.1.13"
   }
 }
