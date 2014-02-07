@@ -97,11 +97,15 @@ angular.module('myApp.controllers', []).
 
 
 	}).
-	controller('profileCtrl', function ($scope, $http, auth) {
+	controller('profileCtrl', function ($scope, $http, $location, auth) {
 		$scope.$watch('user', function(newValue) {
 			if($scope.user) {
 				console.log('watch change');
 				console.log($scope.user);
 			}
 		});
+
+		$scope.logout = function() {
+			$http.get('/api/logout');
+		}
 	});

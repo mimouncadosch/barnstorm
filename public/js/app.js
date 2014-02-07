@@ -12,8 +12,7 @@ var myApp = angular.module('myApp', [
 myApp.config(function ($routeProvider, $locationProvider) {
 	$routeProvider.
 		when('/', {
-			templateUrl: 'partials/landing.html',
-			controller: 'landingCtrl'
+			redirectTo:'/landing'
 		}).
 		when('/landing', {
 			templateUrl: 'partials/landing.html',
@@ -26,8 +25,8 @@ myApp.config(function ($routeProvider, $locationProvider) {
 		when('/profile', {
 			templateUrl: 'partials/profile.html',
 			controller: 'profileCtrl'
-		});//.
-		//otherwise({redirectTo:'/landing'});
+		}).
+		otherwise({redirectTo:'/landing'});
 
 	$locationProvider.html5Mode(true);
 });

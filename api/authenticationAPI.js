@@ -45,7 +45,7 @@ module.exports = function(app, passport) {
 	app.get('/api/logout', function(req, res) {
 		console.log("logging out");
 		req.logout();
-		res.redirect('/login');
+		res.redirect('/landing');
 	});
 
 
@@ -101,16 +101,6 @@ module.exports = function(app, passport) {
 	// })
 
 
-
-	// =====================================
-	// LOGOUT ==============================
-	// =====================================
-	app.get('/api/logout', function(req, res) {
-		console.log("logging out");
-		req.logout();
-		res.redirect('/login');
-	});
-
 };
 
 /**
@@ -124,6 +114,7 @@ function isLoggedIn(req, res, next) {
         return next();
     else {
     	console.log('user not logged in');
+    	res.status(401);
     	res.end();
     }
 
