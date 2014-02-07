@@ -2,7 +2,6 @@ var oauth = require('./models/oauth.js');
 var request = require('request');
 var queryString = require('querystring');
 var Twit = require('twit');
-
 var nlp = require('./nlpAPI');
 
 var T = new Twit({
@@ -13,55 +12,58 @@ var T = new Twit({
 })
 
 
-module.exports = function(app, passport) {
-	app.get('/api/gettweets', getTweets());
-}
-
 // Pulls tweets based on a query
-function getTweets(){
-	return function(req, res){
-		// get url string and convert to json object
-		var query = req._parsedUrl.query;
-		var objParams = queryString.parse(query);
+exports.getTweets = function(cb){
 
-		// grab params and set defaults
-		var query = objParams.q;
-		console.log(query);
-		console.log('calling function to get tweets');
-		
-		T.get('statuses/user_timeline', { screen_name: query, count: 15},  function (err, result) {
-			for (var i = 0; i < result.length; i++) {
-				var item = result[i];
-	      	// console.log(result[i]);
-	      	// console.log(result[i].id);
-	      	console.log(result[i].text);
-	      	// console.log(result[i].user.name);
-	      	// console.log(result[i].user.screen_name);
-	      	// console.log(result[i].user.location);
-	      	// console.log(result[i].user.description);
-	      	// console.log(result[i].user.url);
-	      	// console.log(result[i].user.followers_count);
-	      	// console.log(result[i].created_at);
-	      	// console.log(result[i].user.profile_background_image_url);
+	// get url string and convert to json object
+	// var query = req._parsedUrl.query;
+	// var objParams = queryString.parse(query);
+	// // grab params and set defaults
+	// var query = objParams.q;
+	// console.log(query);
+	console.log('calling function to get tweets');
 
-	      	console.log("Sentiment Score: ");
-	      	nlp.getSentiment(result[i].text);
-	      }
-	      console.log("total tweets: " + result.length);
+	
+	T.get('statuses/user_timeline', { screen_name: "penn", count: 20},  function (err, results) {
+		var tweetArray = [];
 
-	      res.send("We're done");
-
-	  	});
-	}
+		for (var i = 0; i < results.length; i++) {
+			var item = results[i];
+			
+			var tweetObject = {
+				user: {
+					user_name: results[i].user.name,
+					user_screen_name: results[i].user.screen_name,
+					user_location: results[i].user.location,
+					user_url: results[i].user.url, 
+					followers_count: results[i].user.followers_count, 
+					profile_background_image_url: results[i].user.profile_background_image_url, 
+				},
+				text: results[i].text,
+				// location: , 
+				created_at: results[i].created_at,
+				sentiment: 0
+			};
+			tweetArray.push(tweetObject);
+      	}
+      	cb(tweetArray);
+      	// res.json(tweetArray);
+      	//return tweetArray;
+	});
 }
+		
+
+
+
+
 
 // Get all the tweets within a radius
-function getGeoTweets(req, res){
-		var query = req.parsedUrl.query;
-		var objParams = queryString.parse(query);
+// function getGeoTweets(req, res){
+// 		var query = req.parsedUrl.query;
+// 		var objParams = queryString.parse(query);
 
-		var latitude 	=  		objParams.latitude;
-		var longitude 	= 		objParams.longitude;
-		var radius 		= 		objParams.radius;
-}
+// 		var latitude 	=  		objParams.latitude;
+// 		var longitude 	= 		objParams.longitude;
+// 		var radius 		= 		objParams.radius;
+// }
 

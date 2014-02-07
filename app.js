@@ -73,15 +73,12 @@ app.use("/lib", express.static(__dirname + "/public/lib"));
 
 // load user API and pass in our express app and fully configured passport
 require('./api/authenticationAPI.js')(app, passport);
-require('./api/twitterAPI')(app, passport);
+var twitter = require('./api/twitterAPI');
 var nlp = require('./api/nlpAPI');
 
 // JSON API
-// app.get('/api/name', api.name);
-// app.get('/hello', nlp.sayHello);
 app.get('/dict', nlp.getSentiment);
-// app.get('/tokenize', nlp.tokenizeTweet);
-// app.get('/word', nlp.wordInDictionary);
+app.get('/api/gettweets', twitter.getTweets);
 
 
 // route for facebook authentication and login
