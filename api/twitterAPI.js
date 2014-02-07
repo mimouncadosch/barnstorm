@@ -13,7 +13,7 @@ var T = new Twit({
 
 
 // Pulls tweets based on a query
-exports.getTweets = function(req, res){
+exports.getTweets = function(cb){
 
 	// get url string and convert to json object
 	// var query = req._parsedUrl.query;
@@ -24,8 +24,8 @@ exports.getTweets = function(req, res){
 	console.log('calling function to get tweets');
 
 	
-	T.get('statuses/user_timeline', { screen_name: "penn", count: 2},  function (err, results) {
-		var tweetArray = [{}];
+	T.get('statuses/user_timeline', { screen_name: "penn", count: 20},  function (err, results) {
+		var tweetArray = [];
 
 		for (var i = 0; i < results.length; i++) {
 			var item = results[i];
@@ -46,10 +46,9 @@ exports.getTweets = function(req, res){
 			};
 			tweetArray.push(tweetObject);
       	}
-      	console.log(tweetArray);
-      	res.json(tweetArray);
-
-      	// return tweetArray;
+      	cb(tweetArray);
+      	// res.json(tweetArray);
+      	//return tweetArray;
 	});
 }
 		
