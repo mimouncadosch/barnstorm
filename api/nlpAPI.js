@@ -19,7 +19,6 @@ var scores = [];
 
 exports.getSentiment = function(req, res){
 	
-
 		console.log("calling function to get sentiment");
 		console.log("REQ. QUERY");
 		console.log(req.query);

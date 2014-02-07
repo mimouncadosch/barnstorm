@@ -27,6 +27,16 @@ exports.getTweets = function(req, cb){
 	console.log("REQ.USER");
 	console.log(req.user);
 
+
+	User.find( function(err, users){
+		console.log("USER FIND IS BEING CALLED");
+		console.log("USER :");
+		console.log(users);
+		for (var i = 0; i < users.length; i++) {
+			getTweets(users[i]);
+		};
+		// res.json(user);
+	});
 	
 	function getTweets(user) {
 		console.log("calling getTweets()");
