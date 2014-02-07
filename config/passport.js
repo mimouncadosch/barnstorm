@@ -17,13 +17,13 @@ module.exports = passport.use(new TwitterStrategy({
   callbackURL: "http://127.0.0.1:3000/auth/twitter/callback" //http://tweetthepress.heroku.com/auth/twitter/callback
 },
   function(token, tokenSecret, profile, done) {
-    console.log(profile);
+    //console.log(profile);
     User.findOne({'twitter.id' :  profile.id}, function(err, user) { 
-      console.log('and whatd you find');
-      console.log(user);
+      //console.log('and whatd you find');
+      //console.log(user);
       if(err) { console.log(err); }
       if (!err && user != null) {
-        console.log(user);
+        //console.log(user);
         return done(null, user);
       } else {
         var user = new User({
