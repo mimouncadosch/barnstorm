@@ -157,13 +157,16 @@ function cronJob(req, res) {
 		}, function (err) {
 	 		console.log("Finished!");
 	 		req.params['tweets'] = tweets;
-	  		saveTweets(req, res, tweets);
+	  		saveTweets(req, res, function(tweets) {
+	  			res.json(tweets);
+	  		});
 		});
 
 	});	
 }
 
-function saveTweets(req, res, tweets) {
+function saveTweets(req, res, next) {
+	var tweets = req.params['tweets'];
 	for (var i = tweets.length - 1; i >= 0; i--) {
 		var tweet_date = Date.parse(tweets[i].created_at);
 		//console.log(tweet_date);
@@ -184,8 +187,10 @@ function saveTweets(req, res, tweets) {
 			console.log('saved');
 		}
 	};
-	res.json(tweets);
-}
+	if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
+};
+
+//}
 
 		// for (var i = 0; i < tweets.length; i++) {
 		// 	var text = tweets[i].text;

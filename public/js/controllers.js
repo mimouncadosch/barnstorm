@@ -28,17 +28,18 @@ angular.module('myApp.controllers', []).
 			console.log("calling getTweets in front end");
 			$http({
 				method: 'GET',
-				url: '/dict'
+				url: '/api/cronjobs',
+
 			}).success(function (data, status, headers, config) {
-				$scope.tweets = data;
-				draw(data);
-				console.log($scope.tweets);
+				//$scope.tweets = data;
+				console.log(data);
+				//console.log($scope.tweets);
 			}).error(function (data, status, headers, config) {
 				console.log(data);
 			});			
 		}
 
-		function draw (data){
+		function draw(data){
 		
 			console.log("program is calling to draw the map");
 			console.log("Date from DB");
