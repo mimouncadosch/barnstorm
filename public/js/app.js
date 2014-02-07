@@ -2,14 +2,14 @@
 
 // Declare app level module which depends on filters, and services
 
-angular.module('myApp', [
+var myApp = angular.module('myApp', [
 	'ngRoute',
 	'myApp.controllers',
 	'myApp.filters',
 	'myApp.services',
 	'myApp.directives'
-]).
-config(function ($routeProvider, $locationProvider) {
+]);
+myApp.config(function ($routeProvider, $locationProvider) {
 	$routeProvider.
 		when('/', {
 			templateUrl: 'partials/landing.html',
@@ -31,3 +31,4 @@ config(function ($routeProvider, $locationProvider) {
 
 	$locationProvider.html5Mode(true);
 });
+

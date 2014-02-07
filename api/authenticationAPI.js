@@ -28,9 +28,9 @@ module.exports = function(app, passport) {
 	// we will use route middleware to verify this (the isLoggedIn function)
 
 	app.get('/api/isLoggedin', isLoggedIn, function(req, res) {
-		console.log('back-end profile page');
+		//console.log('back-end profile page');
 		res.json(req.user);
-		console.log(req.user);
+		//console.log(req.user);
 		// get the user JSON object out of session and pass to template
 	});
 
@@ -102,14 +102,14 @@ module.exports = function(app, passport) {
 
 
 
-	// // =====================================
-	// // LOGOUT ==============================
-	// // =====================================
-	// app.get('/api/logout', function(req, res) {
-	// 	console.log("logging out");
-	// 	req.logout();
-	// 	res.redirect('/login');
-	// });
+	// =====================================
+	// LOGOUT ==============================
+	// =====================================
+	app.get('/api/logout', function(req, res) {
+		console.log("logging out");
+		req.logout();
+		res.redirect('/login');
+	});
 
 };
 
