@@ -94,19 +94,11 @@ exports.getSentiment = function(req, res){
 				console.log(tweetsArray);
 
 				for (var i = 0; i < tweetsArray.length; i++) {
-					var newTweet = new Tweet(tweetsArray[i]);
+					var newTweet = new Tweet(tweetsArray[i]);	
 					newTweet.save();
-					console.log("tweet added: " + req.body);
-  					res.json(req.body);
+					console.log("tweet added");
 				};
 			}
 			//end of fs.readFile(...)
 		});
-}
-
-exports.saveTweets = function(req, res){
-	// var newTweet = new Tweet(req.body);
- //  	newTweet.save();
- //  	console.log("tweet added: " + req.body);
- //  	res.json(req.body);
 }
