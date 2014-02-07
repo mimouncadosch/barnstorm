@@ -1,8 +1,8 @@
 <h2>Dashboard</h2>
 <a href='/profile'>Profile Page</a>
 <button ng-click="getTweets()"> Get Mah Tweets</button>
-<div>
-<p ng-repeat="tweet in tweets">{{tweet.content}}</p>
+<div> 
+<p ng-repeat="tweet in tweets track by $index">{{tweet.content}}</p>
 </div>
 
 <p>This is where the D3 is going to go</p>

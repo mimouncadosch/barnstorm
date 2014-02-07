@@ -17,6 +17,7 @@ module.exports = passport.use(new TwitterStrategy({
   callbackURL: "http://127.0.0.1:3000/auth/twitter/callback" //http://tweetthepress.heroku.com/auth/twitter/callback
 },
   function(token, tokenSecret, profile, done) {
+    console.log(profile);
     User.findOne({'twitter.id' :  profile.id}, function(err, user) { 
       console.log('and whatd you find');
       console.log(user);

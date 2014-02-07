@@ -22,7 +22,7 @@ angular.module('myApp.controllers', []).
 
 
 	}).
-	controller('dashboardCtrl', function ($scope, $http) {
+	controller('dashboardCtrl', function ($scope, $http, auth) {
 	// write Ctrl here
 		$scope.getTweets = function() {
 			$http({
