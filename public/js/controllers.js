@@ -42,9 +42,9 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 
 	function draw(tweets){
 			console.log(tweets);
-			var margin = {top: 20, right: 20, bottom: 30, left: 50},
-			    width = 960 - margin.left - margin.right,
-			    height = 500 - margin.top - margin.bottom;
+			var margin = {top: 30, right: 30, bottom: 30, left: 40},
+			    width = 700 - margin.left - margin.right,
+			    height = 450 - margin.top - margin.bottom;
 
 
 			var x = d3.time.scale()
