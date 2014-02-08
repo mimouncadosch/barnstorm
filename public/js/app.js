@@ -26,6 +26,10 @@ myApp.config(function ($routeProvider, $locationProvider) {
 			templateUrl: 'partials/profile.html',
 			controller: 'profileCtrl'
 		}).
+		when('/map', {
+			templateUrl: 'partials/map.html',
+			controller: 'mapCtrl'
+		}).
 		otherwise({redirectTo:'/landing'});
 
 	$locationProvider.html5Mode(true);

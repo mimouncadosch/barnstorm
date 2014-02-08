@@ -13,7 +13,8 @@ var tweetSchema =  new Schema({
         location        				: String,
         url         					: String,
         followers_count					: Number,
-        profile_background_image_url	: String
+        profile_background_image_url	: String,
+        coordinates                     : { lat: Number, lng: Number}
     },
     text: String,
 	created_at: Date,

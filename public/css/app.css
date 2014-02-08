@@ -29,6 +29,12 @@
   padding: 0;
 }
 
+
+#map-canvas { 
+  height: 400px;
+  width: 50%;
+}
+
 /* d3 graph display */
 
 /* tell the SVG path to be a thin blue line without any area fill */

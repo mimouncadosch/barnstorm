@@ -127,4 +127,44 @@ angular.module('myApp.controllers', []).
 		$scope.logout = function() {
 			$http.get('/api/logout');
 		}
+	}).
+
+	controller('mapCtrl', function ($rootScope, $scope, $http, $location, auth, GoogleMap) {
+		console.log("I'm in Map Controller");
+		var map = GoogleMap.createMap();
+
+		$scope.$watch('user', function(newValue) {
+			if($scope.user) {
+				console.log('watch change');
+				console.log($scope.user.twitter.username);
+		
+				$scope.getTweets = function() {
+					console.log("calling getTweets in front end");
+					$http({
+						method: 'GET',
+						url: '/api/db'
+						// params: {
+						// 	username : $scope.user.twitter.username
+						// }
+					}).success(function (data, status, headers, config) {
+						console.log("Tweet Location: ");
+						console.log(data);
+						GoogleMap.populateMap(data, map);
+
+						//console.log($scope.tweets);
+					}).error(function (data, status, headers, config) {
+						console.log("error");
+						// console.log(data);
+					});			
+				}
+				$scope.getTweets();
+			}
+		});
+
+
+		
 	});
+
+
+
+

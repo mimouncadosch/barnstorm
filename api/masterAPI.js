@@ -9,6 +9,7 @@ var async = require('async');
 var natural = require('natural');
 var queryString = require('querystring');
 var moment = require('moment');
+var request = require('request');
 moment().format();
 
 //models
@@ -31,7 +32,9 @@ var tokenizer = new natural.WordTokenizer();
 module.exports = {
 	getTweets: getTweets,
 	getSentiment: getSentiment,
-	cronJob : cronJob
+	cronJob : cronJob,
+	getTweetsFromDB: getTweetsFromDB,
+	getCoordinates: getCoordinates
 }
 
 /**
@@ -41,7 +44,7 @@ module.exports = {
  */
 function getTweets(req, res, next){
 	var username = req.param('username');
-	T.get('statuses/user_timeline', { screen_name: username, count: 10},  function (err, results) {
+	T.get('statuses/user_timeline', { screen_name: username, count: 1},  function (err, results) {
 		var tweetArray = [];
 		for (var i = 0; i < results.length; i++) {
 			var item = results[i];
@@ -151,7 +154,11 @@ function cronJob(req, res) {
 			getSentiment(req, res, function(score) {
 				//console.log(text + score);
 				tweet.sentiment = score;
-				callback();
+				req.params['location'] = tweet.user.location;
+				getCoordinates(req, res, function(coordinates) {
+					tweet.user.coordinates = coordinates;
+					callback();
+				})
 			});	
 
 		}, function (err) {
@@ -189,6 +196,42 @@ function saveTweets(req, res, next) {
 	};
 	if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
 };
+
+
+function getCoordinates(req, res, next){
+
+	var location = req.param('location');
+
+	var geocoding = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + location + "&sensor=false";
+
+	request(geocoding, function(err, result) {
+		if(err) {
+			console.log("BAAAD");
+			console.log(err);
+		}
+		var content = result.body;
+		var parsed_content = JSON.parse(content);
+		var coordinates = parsed_content.results[0].geometry.location;
+		if(typeof(next) == "function") { next(coordinates); } else { res.json(coordinates); }
+	})
+	
+
+
+}
+
+
+function getTweetsFromDB(req, res) {
+	Tweet.find({'twitter.username': req.user.username}, function(err, tweets) {
+		if (err){
+			return done(err);
+		}
+		else{
+			console.log("Sending Tweets from DB");
+			console.log(tweets);
+			res.json(tweets);	
+		}
+	});
+}
 
 //}
 

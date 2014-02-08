@@ -84,8 +84,8 @@ app.get('/api/getSentiment', masterAPI.getSentiment);
 // app.get('/api/schedule', twitter.schedule);
 // app.get('/api/test', masterAPI.getTweetsThenCalculateScore);
 app.get('/api/cronJob', masterAPI.cronJob);
-
-
+app.get('/api/db', masterAPI.getTweetsFromDB);
+app.get('/api/geo', masterAPI.getCoordinates);
 
 
 
