@@ -93,7 +93,7 @@ myModule.factory('GoogleMap', function($http){
               '<p>'+ tweets[i].user.followers_count + '</p>'+
               '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
               + '</div>';
-          contentArray.pusth(contentString);
+          contentArray.push(contentString);
 
           var infoWindow = new google.maps.InfoWindow({
                 content: contentString
@@ -104,8 +104,20 @@ myModule.factory('GoogleMap', function($http){
         }
 
         for (var i = 0; i < tweets.length; i++) {
+          // console.log("markerArray[i]");
+          // console.log(markerArray[i]);
+          // console.log("contentArray[i]");
+          // console.log(contentArray[i]);
+          // console.log("windowArray[i]");
+          // console.log(windowArray[i]);
+
+
+        };
+
+
+        for (var i = 0; i < tweets.length; i++) {
           google.maps.event.addListener(markerArray[i], 'click', function() {
-                windowArray[i].open(map,marker);
+                windowArray[i].open(map,markerArray[i]);
               });
         };
 
