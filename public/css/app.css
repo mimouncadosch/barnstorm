@@ -1,34 +1,45 @@
 /* app css stylesheet */
 
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+@import url(http://fonts.googleapis.com/css?family=Fauna+One);
+@import url(http://fonts.googleapis.com/css?family=Lobster+Two);
+
+body { 
+  font-family: 'Fauna One';
+}
+/*  background: url() no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-family: 'Fauna One', serif;
+}*/
+
+/*#logo {
+  background: url('img/barnstorm_logo.png') no-repeat center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  width: 100px;
+  height: 100px;
+
+}*/
+
+.site-wrapper {
+  background: rgba(51, 204, 255, .5);
 }
 
-.menu:before {
-  content: "[";
+.cover-heading, .masthead-brand {
+  font-family: 'Lobster Two', cursive;
 }
 
-.menu:after {
-  content: "]";
+.cover-heading {
+  font-size: 72px;
 }
 
-.menu > li {
-  display: inline;
+.btn.btn-lg.btn-default:hover {
+  background-position: 0px;
 }
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
-
 
 #map-canvas { 
   height: 400px;
