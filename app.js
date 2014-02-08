@@ -86,6 +86,7 @@ app.get('/api/getSentiment', masterAPI.getSentiment);
 app.get('/api/cronJob', masterAPI.cronJob);
 app.get('/api/db', masterAPI.getTweetsFromDB);
 app.get('/api/geo', masterAPI.getCoordinates);
+app.get('/schedule', masterAPI.scheduleCronJob);
 
 
 

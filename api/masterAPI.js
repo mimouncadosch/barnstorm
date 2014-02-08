@@ -34,7 +34,8 @@ module.exports = {
 	getSentiment: getSentiment,
 	cronJob : cronJob,
 	getTweetsFromDB: getTweetsFromDB,
-	getCoordinates: getCoordinates
+	getCoordinates: getCoordinates, 
+	scheduleCronJob: scheduleCronJob
 }
 
 /**
@@ -43,28 +44,32 @@ module.exports = {
  * @return {array of objects} the array of tweets
  */
 function getTweets(req, res, next){
-	var username = req.param('username');
-	T.get('statuses/user_timeline', { screen_name: username, count: 1},  function (err, results) {
+	var username = req.param('q');
+	console.log('get tweets ' + username);
+	T.get('search/tweets', { q: "to:" + username + ' OR ' + "from:" + username, count: 5},  function (err, results) {
+		//console.log('results');
+		//console.log(results);
 		var tweetArray = [];
-		for (var i = 0; i < results.length; i++) {
-			var item = results[i];
-
+		for (var i = 0; i < results.statuses.length; i++) {
+			var item = results.statuses[i];
+			//console.log(item.user);
 			var tweet = {
 				user: {
-					name: results[i].user.name,
-					screen_name: results[i].user.screen_name,
-					location: results[i].user.location,
+					name: item.user.name,
+					screen_name: item.user.screen_name,
+					location: item.user.location,
 					//url: results[i].user.url, 
-					followers_count: results[i].user.followers_count, 
-					profile_background_image_url: results[i].user.profile_background_image_url, 
+					followers_count: item.user.followers_count, 
+					profile_background_image_url: item.user.profile_background_image_url, 
 				},
-				text: results[i].text,
+				text: item.text,
 				// location: , 
-				created_at: results[i].created_at,
+				created_at: item.created_at,
 				sentiment: 0
 			};
 			tweetArray.push(tweet);
 		}
+		// res.json(tweetArray);
 		if(typeof(next) == "function") { next(tweetArray); } else { res.json(tweetArray); }
 	});
 }
@@ -126,26 +131,78 @@ function getSentiment(req, res, next){
 	}
 };
 function scheduleCronJob(req, res) {
+	console.log('start cron job schedular');
 	var rulesArray = [];
 	// create array of minutes
 	for (var i = 0; i < 60; i++) {
 		rulesArray.push(i);
 	};
 
+
+
+	// async.forEachSeries(tweets, function(tweet, callback) {
+	// 	var text = tweet.text;
+	// 	//console.log(text);
+	// 	req.params['text'] = text; 
+	// 	getSentiment(req, res, function(score) {
+	// 		//console.log(text + score);
+	// 		tweet.sentiment = score;
+	// 		req.params['location'] = tweet.user.location;
+	// 		getCoordinates(req, res, function(coordinates) {
+	// 			tweet.user.coordinates = coordinates;
+	// 			callback();
+	// 		})
+	// 	});	
+
+	// }, function (err) {
+ // 		console.log("Finished!");
+ // 		req.params['tweets'] = tweets;
+ //  		saveTweets(req, res, function(tweets) {
+ //  			if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
+ //  		});
+	// });
+
+
+
 	for (var i = 0; i < rulesArray.length; i++) {
 		var rule = new schedule.RecurrenceRule();
-		schedule.scheduleJob(rule, function(){
-			console.log('The answer to life, the universe, and everything!');
-			cronJob(req, res);
-	    });
 	};
+	schedule.scheduleJob(rule, function(){
+
+		// Find all users from db	
+		User.find({}, function(err, users) {
+			if (err){
+				return done(err);
+			}
+			else{
+				console.log("CronJob for every user: ");
+
+				for (var j = 0; j < users.length; j++) {
+					req.params['q'] = users[j].twitter.username;
+					cronJob(req, res, function(data) {
+						console.log('got user. heres the data.')
+						console.log("j: " + j);
+						console.log(data);
+					});
+				}
+
+				//res.json(tweets);	
+			}
+		});
+
+
+		// // console.log('The answer to life, the universe, and everything!');
+		// cronJob(req, res, function (data) {
+		// 	console.log('CronJob response');
+		// 	console.log(data);
+		// });
+    });
 }
-		
 
 
-function cronJob(req, res) {
+function cronJob(req, res, next) {
 	//var username = 'MPCadosch';
-	//req.params['username'] = username;
+	//req.params['q'] = req.param('q');
 	getTweets(req, res, function(tweets) {
 		async.forEachSeries(tweets, function(tweet, callback) {
 			var text = tweet.text;
@@ -165,7 +222,7 @@ function cronJob(req, res) {
 	 		console.log("Finished!");
 	 		req.params['tweets'] = tweets;
 	  		saveTweets(req, res, function(tweets) {
-	  			res.json(tweets);
+	  			if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
 	  		});
 		});
 
@@ -211,12 +268,15 @@ function getCoordinates(req, res, next){
 		}
 		var content = result.body;
 		var parsed_content = JSON.parse(content);
-		var coordinates = parsed_content.results[0].geometry.location;
+
+		if(parsed_content.results[0]){
+			var coordinates = parsed_content.results[0].geometry.location;	
+		}
+		else if(!(parsed_content.results[0])){
+			var coordinates = null;
+		}
 		if(typeof(next) == "function") { next(coordinates); } else { res.json(coordinates); }
 	})
-	
-
-
 }
 
 
