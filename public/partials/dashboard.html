@@ -10,14 +10,16 @@
 </div>
 <div class="inner cover" >
 	<h2>Dashboard</h2>
-	<div class="row">
 
-		<div class="col-md-6 col-sm-3" id="map-canvas">
-		</div>
-		<div class="col-md-6">
-			<p>graph</p>
-		</div>
-		
+	<ul class="nav nav-pills">
+	  <li class="active"><a ng-click="map = true">Map</a></li>
+	  <li><a ng-click="map = false">Graph</a></li>
+	</ul>
+
+	<div class="container-fluid">
+		<div ng-show="map" id="map-canvas"></div>
+
+		id="graph" class="aGraph"
 	</div>
 </div>
 <div class="mastfoot">

@@ -93,7 +93,7 @@ myModule.factory('GoogleMap', function($http){
               '<p>'+ tweets[i].user.followers_count + '</p>'+
               '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
               + '</div>';
-          contentArray.pusth(contentString);
+          contentArray.push(contentString);
 
           var infoWindow = new google.maps.InfoWindow({
                 content: contentString
