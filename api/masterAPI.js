@@ -371,10 +371,19 @@ function getTweetsFromDB(req, res) {
 
 		for (var i = 0; i < tweets.length; i++) {
 
-			if (tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || (tweets[i].text.indexOf(req.user.twitter.username != -1))) 
-			{
-				console.log('user mentioned in tweet or user posted him/herself');
+			var username = req.user.twitter.username;
+
+			if (tweets[i].user.screen_name == username) {
+				console.log("by me " + tweets[i].text);
 				tweetsArray.push(tweets[i]);
+			} else if (tweets[i].text.indexOf(username) != -1) {
+				console.log('it talks about me');
+				console.log(tweets[i].text.indexOf(username) != -1) ;
+				tweetsArray.push(tweets[i]);
+			} else {
+				console.log('user netither mentioned in tweet or user posted him/herself');
+				console.log(tweets[i]);
+				//tweetsArray.push(tweets[i]);
 			}
 		};
 		res.json(tweetsArray);
