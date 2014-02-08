@@ -37,8 +37,8 @@ module.exports = {
 	getCoordinates: getCoordinates, 
 	scheduleCronJob: scheduleCronJob,
 	replyTweet: replyTweet,
-	termImportance: termImportance//,
-	// donateToUs: donateToUs
+	termImportance: termImportance,
+	donateToUs: donateToUs
 }
 
 /**
@@ -478,26 +478,25 @@ function termImportance(req, res){
 	res.json(wordImportance);
 }
 
+function donateToUs(req, res) {
+	var accessToken = req.param('access_token');
 
-// var request = require('request');
-
-
-
-// function donateToUs(req, res) {
-// 	var accessToken = req.param('access_token');
-
-// 	request.post({
-// 	  url:     'https://api.venmo.com/v1/payments',
-// 	  form: { 
-// 	  	access_token: accessToken,
-// 	  	email: 'freeslugs@gmail.com',
-// 	  	note: 'donation to barnstorm', 
-// 	  	amount: 5
-// 	  }
-// 	}, function(error, response, body){
-// 	  console.log(body);
-// 	});
-// }
+	request.post({
+	  url:     'https://api.venmo.com/v1/payments',
+	  form: { 
+	  	access_token: accessToken,
+	  	email: 'freeslugs@gmail.com',
+	  	note: 'donation to barnstorm', 
+	  	amount: 5
+	  }
+	}, function(error, response, body){
+	  if(error) {
+	  	console.log(error);
+	  }
+	  console.log(response);
+	  console.log(body);
+	});
+}
 
 
 
