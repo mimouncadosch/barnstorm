@@ -352,18 +352,34 @@ function getTweetsFromDB(req, res) {
 	// console.log(req.user.twitter.username);
 	// req.user.twitter.username
 
-	Tweet.find({'user.screen_name': req.user.twitter.username}, function(err, tweets) {
-		if (err){
-			console.log("err");
-			console.log(err);
-			return done(err);
-		}
-		else{
-			console.log("Sending Tweets from DB");
-			console.log(tweets);
-			res.json(tweets);	
-		}
+	// Tweet.find({'user.screen_name': req.user.twitter.username}, function(err, tweets) {
+	// 	if (err){
+	// 		console.log("err");
+	// 		console.log(err);
+	// 		return done(err);
+	// 	}
+	// 	else{
+	// 		console.log("Sending Tweets from DB");
+	// 		console.log(tweets);
+	// 		res.json(tweets);	
+	// 	}
+	// });
+
+	var tweetsArray = [];
+
+	Tweet.find({}, function (err, tweets) {
+
+		for (var i = 0; i < tweets.length; i++) {
+
+			if (tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || (tweets[i].text.indexOf(req.user.twitter.username != -1))) 
+			{
+				console.log('user mentioned in tweet or user posted him/herself');
+				tweetsArray.push(tweets[i]);
+			}
+		};
+		res.json(tweetsArray);
 	});
+
 }
 
 
