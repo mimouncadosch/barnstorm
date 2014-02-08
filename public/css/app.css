@@ -61,13 +61,14 @@ body {
 
 /* tell the SVG path to be a thin blue line without any area fill */
 path {
-  stroke: steelblue;
+  stroke: white;
   stroke-width: 1;
   fill: none;
 }
  
 .axis {
   shape-rendering: crispEdges;
+  stroke: lightgrey;
 }
 
 .x.axis line {
@@ -76,13 +77,16 @@ path {
 
 .x.axis .minor {
   stroke-opacity: .5;
+  stroke: lightgrey;
 }
 
 .x.axis path {
   display: none;
+  stroke: lightgrey;
 }
 
 .y.axis line, .y.axis path {
   fill: none;
-  stroke: #000;
+  /*stroke: #000;*/
+  stroke: lightgrey;
 }
