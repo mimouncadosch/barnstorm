@@ -30,6 +30,9 @@ myApp.config(function ($routeProvider, $locationProvider) {
 			templateUrl: 'partials/features.html',
 			controller: 'dashboardCtrl'
 		}).
+		when('/contact', {
+			templateUrl: 'partials/contact.html',
+		}).
 		otherwise({redirectTo:'/landing'});
 
 	$locationProvider.html5Mode(true);

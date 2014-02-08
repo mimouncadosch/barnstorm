@@ -35,7 +35,7 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 		}).success(function (data, status, headers, config) {
 			console.log('success');
 			draw(data);
-			GoogleMap.populateMap(data, map);
+			GoogleMap.fillMap(data, map);
 		}).error(function (data, status, headers, config) {
 			console.log(data);
 		});			
