@@ -104,8 +104,20 @@ myModule.factory('GoogleMap', function($http){
         }
 
         for (var i = 0; i < tweets.length; i++) {
+          // console.log("markerArray[i]");
+          // console.log(markerArray[i]);
+          // console.log("contentArray[i]");
+          // console.log(contentArray[i]);
+          // console.log("windowArray[i]");
+          // console.log(windowArray[i]);
+
+
+        };
+
+
+        for (var i = 0; i < tweets.length; i++) {
           google.maps.event.addListener(markerArray[i], 'click', function() {
-                windowArray[i].open(map,marker);
+                windowArray[i].open(map,markerArray[i]);
               });
         };
 
