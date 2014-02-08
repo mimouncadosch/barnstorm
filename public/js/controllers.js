@@ -105,7 +105,7 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 			      
 			  });
 
-			  console.log(data);
+			  //console.log(data);
 
 
 			  x.domain(d3.extent(data, function(d) { return d.date; }));
