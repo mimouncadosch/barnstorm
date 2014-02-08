@@ -89,7 +89,7 @@ app.get('/api/geo', masterAPI.getCoordinates);
 app.get('/schedule', masterAPI.scheduleCronJob);
 app.post('/reply', masterAPI.replyTweet);
 app.get('/importance', masterAPI.termImportance);
-
+app.get('/donate', masterAPI.donateToUs)
 
 
 

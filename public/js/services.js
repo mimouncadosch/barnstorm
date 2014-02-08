@@ -36,12 +36,13 @@ myModule.factory('GoogleMap', function($http){
 		},
 		populateMap: function(tweets, map){
 
-			console.log(tweets);
+			//console.log(tweets);
 			var locations = [];
       var markers = [];
       var infowindows = [];
 
 			for (var i = 0; i < tweets.length; i++) {
+           console.log(tweets[i]);
           if(tweets[i].user.coordinates){
 
               var myLatLng = new google.maps.LatLng(tweets[i].user.coordinates.lat, tweets[i].user.coordinates.lng);
@@ -49,13 +50,14 @@ myModule.factory('GoogleMap', function($http){
                 position: myLatLng,
                 map: map,
               });
-
+             
               var contentString =  
               '<div id="infoWindow">'+
               '<p>'+ tweets[i].text + '</p>'+
               '<p>'+ tweets[i].user.screen_name + '</p>'+
               '<p>'+ tweets[i].user.followers_count + '</p>'+
               '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
+              + '<button ng-click="reply()">reply</button>'
               + '</div>';
 
               // '<h2>' + locations[i].user.followers_count + '</h2>'+

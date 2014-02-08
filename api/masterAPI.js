@@ -37,7 +37,8 @@ module.exports = {
 	getCoordinates: getCoordinates, 
 	scheduleCronJob: scheduleCronJob,
 	replyTweet: replyTweet,
-	termImportance: termImportance
+	termImportance: termImportance,
+	donateToUs: donateToUs
 }
 
 /**
@@ -477,6 +478,29 @@ function termImportance(req, res){
 	res.json(wordImportance);
 }
 
+
+var request = require('request');
+
+
+
+function donateToUs(req, res) {
+	var accessToken = req.param('access_token');
+
+	request.post({
+	  url:     'https://api.venmo.com/v1/payments',
+	  form: { 
+	  	access_token: accessToken,
+	  	email: 'freeslugs@gmail.com',
+	  	note: 'donation to barnstorm', 
+	  	amount: 5
+	  }
+	}, function(error, response, body){
+	  console.log(body);
+	});
+}
+
+
+
 // 
 //}
 
@@ -537,3 +561,7 @@ function termImportance(req, res){
 	// request('http://127.0.0.1:3000/api/getTweets', function (error, response, data) {
 	// 	console.log(data);
 	// })	
+
+
+
+
