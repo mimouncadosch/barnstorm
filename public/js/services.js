@@ -38,36 +38,78 @@ myModule.factory('GoogleMap', function($http){
 
 			console.log(tweets);
 			var locations = [];
-			
+      var markers = [];
+      var infowindows = [];
+
 			for (var i = 0; i < tweets.length; i++) {
-        if(tweets[i].user.coordinates){
+          if(tweets[i].user.coordinates){
 
-            var myLatLng = new google.maps.LatLng(tweets[i].user.coordinates.lat, tweets[i].user.coordinates.lng);
-            var marker = new google.maps.Marker({
-              position: myLatLng,
-              map: map,
-            });
+              var myLatLng = new google.maps.LatLng(tweets[i].user.coordinates.lat, tweets[i].user.coordinates.lng);
+              var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+              });
 
-            var contentString =  
-            '<div id="infoWindow">'+
-            '<p>'+ tweets[i].text + '</p>'+
-            '<p>'+ tweets[i].user.screen_name + '</p>'+
-            '<p>'+ tweets[i].user.followers_count + '</p>'+
-            '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
-            + '</div>';
+              var contentString =  
+              '<div id="infoWindow">'+
+              '<p>'+ tweets[i].text + '</p>'+
+              '<p>'+ tweets[i].user.screen_name + '</p>'+
+              '<p>'+ tweets[i].user.followers_count + '</p>'+
+              '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
+              + '</div>';
 
-            // '<h2>' + locations[i].user.followers_count + '</h2>'+
-                    
-            var infowindow = new google.maps.InfoWindow({
-              content: contentString
-            });
-            google.maps.event.addListener(marker, 'click', function() {
-              infowindow.open(map,marker);
-            });
+              // '<h2>' + locations[i].user.followers_count + '</h2>'+
+                      
+              var infowindow = new google.maps.InfoWindow({
+                content: contentString
+              });
+              google.maps.event.addListener(marker, 'click', function() {
+                infowindow.open(map,marker);
+              });
+          }
+			};
+		},
+
+    fillMap: function(tweets, map){
+        var markerArray = [];
+        var windowArray = [];
+        var contentArray = [];
+
+        for (var i = 0; i < tweets.length; i++) {
+            if(tweets[i].user.coordinates){
+
+              var myLatLng = new google.maps.LatLng(tweets[i].user.coordinates.lat, tweets[i].user.coordinates.lng);
+              var marker = new google.maps.Marker({
+                  position: myLatLng,
+                  map: map,
+              });
+              markerArray.push(marker);
+            }
+
+          var contentString =  
+              '<div id="infoWindow">'+
+              '<p>'+ tweets[i].text + '</p>'+
+              '<p>'+ tweets[i].user.screen_name + '</p>'+
+              '<p>'+ tweets[i].user.followers_count + '</p>'+
+              '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
+              + '</div>';
+          contentArray.pusth(contentString);
+
+          var infoWindow = new google.maps.InfoWindow({
+                content: contentString
+          });
+
+          windowArray.push(infoWindow);
 
         }
-			};
-		}
+
+        for (var i = 0; i < tweets.length; i++) {
+          google.maps.event.addListener(markerArray[i], 'click', function() {
+                windowArray[i].open(map,marker);
+              });
+        };
+
+    }
 
 	}
 });
