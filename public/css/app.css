@@ -5,6 +5,7 @@
 
 body { 
   font-family: 'Fauna One';
+  color: black;
 }
 /*  background: url() no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -51,6 +52,14 @@ body {
 #table_header{
   font-size: 20px;
 }
+
+.masthead-brand, .lead, tbody, td, tr, h2, h1, h3 {
+  color: white;
+}
+/*.cover-container {
+  color: white;
+}
+*/
 
 /*#price-table tr td {
     font-size: 50px;

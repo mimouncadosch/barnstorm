@@ -51,11 +51,11 @@ myModule.factory('GoogleMap', function($http){
               });
 
               var contentString =  
-              '<div class="infoWindow">'+
-              '<p style="color: black;">'+ tweets[i].text + '</p>'+
-              '<p style="color: black;>'+ tweets[i].user.screen_name + '</p>'+
-              '<p style="color: black;>'+ tweets[i].user.followers_count + '</p>'+
-              '<p style="color: black;> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
+              '<div id="infoWindow">'+
+              '<p>'+ tweets[i].text + '</p>'+
+              '<p>'+ tweets[i].user.screen_name + '</p>'+
+              '<p>'+ tweets[i].user.followers_count + '</p>'+
+              '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
               + '</div>';
 
               // '<h2>' + locations[i].user.followers_count + '</h2>'+
