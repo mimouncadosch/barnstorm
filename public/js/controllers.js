@@ -36,6 +36,24 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 			// $scope.getTweets();
 		});			
 	}
+	console.log("reply text");
+	console.log($scope.reply.text);
+	// $scope.reply = {username: 'freeslugs'};
+	//$scope.reply.text = 'I like your policies';
+
+	$scope.replyTweet = function() {
+		console.log("replying to tweets");
+		$http({
+			method: 'POST',
+			url: '/reply',
+			params: $scope.reply
+		}).success(function (data, status, headers, config) {
+			console.log(data);
+		}).error(function (data, status, headers, config) {
+			console.log(data);
+		});		
+
+	}
 
 		function draw(tweets){
 			console.log(tweets);

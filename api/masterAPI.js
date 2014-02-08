@@ -35,7 +35,9 @@ module.exports = {
 	cronJob : cronJob,
 	getTweetsFromDB: getTweetsFromDB,
 	getCoordinates: getCoordinates, 
-	scheduleCronJob: scheduleCronJob
+	scheduleCronJob: scheduleCronJob,
+	replyTweet: replyTweet,
+	termImportance: termImportance
 }
 
 /**
@@ -371,12 +373,24 @@ function getTweetsFromDB(req, res) {
 
 		for (var i = 0; i < tweets.length; i++) {
 
+			// console.log("part 1");
+			// console.log(tweets[i].user.screen_name);
+			// console.log(req.user.twitter.username);
+			// console.log("cond 1");
+			// console.log(tweets[i].user.screen_name.indexOf(req.user.twitter.username));
+			// console.log(tweets[i].user.screen_name.indexOf(req.user.twitter.username) != -1);
+
+			// console.log("part 2");
+			// console.log(tweets[i].text);
+			// console.log(req.user.twitter.username);
+			// console.log(tweets[i].text.indexOf(req.user.twitter.username != -1));
+
 			if (tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || (tweets[i].text.indexOf(req.user.twitter.username != -1))) 
 			{
 				console.log('user mentioned in tweet or user posted him/herself');
 				tweetsArray.push(tweets[i]);
 			}
-		};
+		}
 		res.json(tweetsArray);
 	});
 
@@ -384,42 +398,71 @@ function getTweetsFromDB(req, res) {
 
 
 
+function replyTweet(req, res){
 
-// function termImportance(req, res){
-// 	var TfIdf = natural.TfIdf;
-// 	var tfidf = new TfIdf();
-// 	console.log("req.user.username");
-// 	console.log(req.user.username);
+	console.log(req.params);
+	// console.log(req);
+	// console.log(req.param('username'));
+	// console.log(req.param('text'));
+	// T.post('statuses/update', { status: req.param('username') +  " " + req.param('text')}, function(err, reply) {
+ // 		//...
+ 		// console.log("response sent");
+	// })
 
-// 	Tweet.find({'twitter.username': req.user.username}, function(err, tweets) {
-// 		if (err){
-// 			return done(err);
-// 		}
-// 		else{
-// 			console.log("Found Tweets in DB");
-// 			console.log(tweets);
-// 			for (var i = 0; i < tweets.length; i++) {
-// 				tfidf.addDocument(tweets[i]);
-// 			};
-// 			console.log('node --------------------------------');
-// 			tfidf.tfidfs('hi', function(i, measure) {
-// 				console.log('document #' + i + ' is ' + measure);
-// 			});
-
-// 			res.json(tweets);
-// 		}
-// 	});
+}
 
 
+function termImportance(req, res){
+	var TfIdf = natural.TfIdf;
+	var tfidf = new TfIdf();
+	console.log("req.user.username");
+	console.log(req.user.username);
+	var wordImportance = [];
 
-// }
+	Tweet.find({}, function(err, tweets) {
+
+		if (err){
+			return done(err);
+		}
+		else{
+			console.log("Found Tweets in DB");
+			// console.log(tweets);
+
+			// Add documents to trainer
+			for (var i = 0; i < tweets.length; i++) {
+				tfidf.addDocument(tweets[i].text);
+			}
 
 
+			// Loop through tweets
+			for (var i = 0; i < tweets.length; i++) {
+				console.log("tweets length");
+				console.log(tweets.length);
 
+				// Tokenize every single tweet into an array
+				var tokenizedTweet = tokenizer.tokenize(tweets[i].text);
 
+				// Calculate the relative importance of every word in the tokenized array
+				for (var j = 0; j < tokenizedTweet.length; j++) {
+					var word = tokenizedTweet[j];
+					tfidf.tfidfs(word, function(k, measure) {
+						// Measure is the importance of word tokenizedTweet[j] to document k
+						// console.log('document #' + k + ' is ' + measure);
+						var total_importance = 0;
+						if (!isNaN(measure)){
+							total_importance += measure;
+						}
+						wordImportance.push( {word : word, measure :  measure });
+						console.log(wordImportance[j]);
+					});
+				}
+			}
+		}
+	});
+	res.json(wordImportance);
+}
 
-
-
+// 
 //}
 
 		// for (var i = 0; i < tweets.length; i++) {
