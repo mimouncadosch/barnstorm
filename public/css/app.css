@@ -42,19 +42,15 @@ body {
 }
 
 #map-canvas { 
-  height: 400px;
-  width: 50%;
+  height: 100%;
+  min-height: 400px;
+  width: 100%;
+  min-width: 600px;
 }
 
 #table_header{
   font-size: 20px;
 }
-
-#infowindow p {
-  color: black !important;
-  text-decoration: none;
-}
-
 
 /*#price-table tr td {
     font-size: 50px;
