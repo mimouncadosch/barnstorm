@@ -490,11 +490,7 @@ function donateToUs(req, res) {
 	  	amount: 5
 	  }
 	}, function(error, response, body){
-	  if(error) {
-	  	console.log(error);
-	  }
-	  console.log(response);
-	  console.log(body);
+		res.redirect('/thankyou');
 	});
 }
 

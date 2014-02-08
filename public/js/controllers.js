@@ -5,7 +5,8 @@
 angular.module('myApp.controllers', []).
 controller('AppCtrl', function ($scope, $http) {
 
-
+}).
+controller('thankyouCtrl', function ($scope, $http) {
 
 }).
 controller('landingCtrl', function ($scope, $http) {
