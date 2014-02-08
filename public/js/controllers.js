@@ -28,10 +28,10 @@ angular.module('myApp.controllers', []).
 			console.log("calling getTweets in front end");
 			$http({
 				method: 'GET',
-				url: '/api/cronJob?username=freeslugs',
+				url: '/api/db'
 			}).success(function (data, status, headers, config) {
-				draw(data);
-				// console.log(data);
+				// draw(data);
+				console.log(data);
 				//console.log($scope.tweets);
 			}).error(function (data, status, headers, config) {
 				console.log(data);

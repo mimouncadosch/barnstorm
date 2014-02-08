@@ -40,29 +40,32 @@ myModule.factory('GoogleMap', function($http){
 			var locations = [];
 			
 			for (var i = 0; i < tweets.length; i++) {
+        if(tweets[i].user.coordinates){
 
-				var myLatLng = new google.maps.LatLng(tweets[i].user.coordinates.lat, tweets[i].user.coordinates.lng);
-				var marker = new google.maps.Marker({
-                        position: myLatLng,
-                        map: map,
-                });
+            var myLatLng = new google.maps.LatLng(tweets[i].user.coordinates.lat, tweets[i].user.coordinates.lng);
+            var marker = new google.maps.Marker({
+              position: myLatLng,
+              map: map,
+            });
 
-                var contentString =  
-                  '<div id="infoWindow">'+
-                  '<p>'+ tweets[i].text + '</p>'+
-                  '<p>'+ tweets[i].user.screen_name + '</p>'+
-                  '<p>'+ tweets[i].user.followers_count + '</p>'+
-                  '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'+
-                  // '<h2>' + locations[i].user.followers_count + '</h2>'+
-                   '</div>';
+            var contentString =  
+            '<div id="infoWindow">'+
+            '<p>'+ tweets[i].text + '</p>'+
+            '<p>'+ tweets[i].user.screen_name + '</p>'+
+            '<p>'+ tweets[i].user.followers_count + '</p>'+
+            '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
+            + '</div>';
 
-               var infowindow = new google.maps.InfoWindow({
-                    content: contentString
-                });
-                google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.open(map,marker);
-                });
+            // '<h2>' + locations[i].user.followers_count + '</h2>'+
+                    
+            var infowindow = new google.maps.InfoWindow({
+              content: contentString
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.open(map,marker);
+            });
 
+        }
 			};
 		}
 

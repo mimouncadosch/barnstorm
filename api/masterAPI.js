@@ -46,7 +46,7 @@ module.exports = {
 function getTweets(req, res, next){
 	var username = req.param('q');
 	console.log('get tweets ' + username);
-	T.get('search/tweets', { q: "to:" + username + ' OR ' + "from:" + username, count: 5},  function (err, results) {
+	T.get('search/tweets', { q: "to:" + username + ' OR ' + "from:" + username, count: 15},  function (err, results) {
 		//console.log('results');
 		//console.log(results);
 		var tweetArray = [];
@@ -169,23 +169,43 @@ function scheduleCronJob(req, res) {
 	};
 	schedule.scheduleJob(rule, function(){
 
-		// Find all users from db	
 		User.find({}, function(err, users) {
 			if (err){
 				return done(err);
 			}
 			else{
-				console.log("CronJob for every user: ");
 
-				for (var j = 0; j < users.length; j++) {
-					req.params['q'] = users[j].twitter.username;
+				async.forEachSeries(users, function(user, callback) {
+					
+					req.params['q'] = user.twitter.username;
 					cronJob(req, res, function(data) {
 						console.log('got user. heres the data.')
-						console.log("j: " + j);
-						console.log(data);
+						console.log(data);						
+						//"j: " + j);
+						// console.log(data);
+						callback();
 					});
-				}
-				res.status(200);
+				}, function (err, tweets) {
+			 		console.log("Finished scheduling a cron for all the users!");
+			 		req.params['tweets'] = tweets;
+			  		//if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
+			  		res.json(tweets);
+				});
+
+		// Find all users from db	
+		
+				// console.log("CronJob for every user: ");
+
+
+				// for (var j = 0; j < users.length; j++) {
+				// 	req.params['q'] = users[j].twitter.username;
+				// 	cronJob(req, res, function(data) {
+				// 		console.log('got user. heres the data.')
+				// 		console.log("j: " + j);
+				// 		console.log(data);
+				// 	});
+				// }
+				// res.status(200);
 				//res.json(tweets);	
 			}
 		});
@@ -203,6 +223,7 @@ function scheduleCronJob(req, res) {
 function cronJob(req, res, next) {
 	//var username = 'MPCadosch';
 	//req.params['q'] = req.param('q');
+	var tweetArray = [];
 	getTweets(req, res, function(tweets) {
 		async.forEachSeries(tweets, function(tweet, callback) {
 			var text = tweet.text;
@@ -214,15 +235,17 @@ function cronJob(req, res, next) {
 				req.params['location'] = tweet.user.location;
 				getCoordinates(req, res, function(coordinates) {
 					tweet.user.coordinates = coordinates;
+					tweetArray.push(tweet);
 					callback();
 				})
 			});	
 
-		}, function (err) {
-	 		console.log("Finished!");
-	 		req.params['tweets'] = tweets;
-	  		saveTweets(req, res, function(tweets) {
-	  			if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
+		}, function (err, data) {
+	 		console.log("Finished cronning a user!");
+	 		console.log(tweetArray.length);
+	 		req.params['tweets'] = tweetArray;
+	  		saveTweets(req, res, function(tweetArray) {
+	  			if(typeof(next) == "function") { next(tweetArray); } else { res.json(tweetArray); }
 	  		});
 		});
 
@@ -230,9 +253,20 @@ function cronJob(req, res, next) {
 }
 
 function saveTweets(req, res, next) {
-	var tweets = req.params['tweets'];
-	for (var i = tweets.length - 1; i >= 0; i--) {
-		var tweet_date = Date.parse(tweets[i].created_at);
+	console.log('save tweets');
+	var tweetsArray = req.param('tweets');
+	async.forEachSeries(tweetsArray, function(tweet, callback) {
+		// Tweet.find({}, function(err, tweets) {
+		// 	if(tweets.indexOf(tweet) == -1) {
+		// 		Tweet(tweet).save();
+		// 		console.log('saved');
+		// 		console.log(tweet.text);
+		// 	}
+		// 	callback();
+		// });
+
+
+		var tweet_date = Date.parse(tweet.created_at);
 		//console.log(tweet_date);
 
 		var now = moment()._d;
@@ -243,15 +277,48 @@ function saveTweets(req, res, next) {
 		//console.log(diff);
 
 		if(diff > 60000) {
-			//console.log("more than a minute difference");
+		//console.log("more than a minute difference");
+			console.log('not saving');
+			callback();
 		}
 		else if(diff < 60000){
 			//console.log("less than one minute ago");
-			Tweet(tweets[i]).save();
-			console.log('saved');
+			Tweet(tweet).save(function (err, tweet) {
+				console.log('saved');
+				callback();
+			});
 		}
-	};
-	if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
+
+	}, function (err) {
+ 		console.log("Finished saving!");
+ 		tweets = req.param('tweets');
+ 		//console.log('is tweets going through saving? ');
+ 		//console.log(tweets.length);
+  		if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
+  		
+	});
+
+	//for (var i = tweets.length - 1; i >= 0; i--) {
+		// var tweet_date = Date.parse(tweets[i].created_at);
+		// //console.log(tweet_date);
+
+		// var now = moment()._d;
+		// var now = Date.parse(now);
+		// //console.log(now);
+
+		// var diff = now - tweet_date;
+		// //console.log(diff);
+
+		// if(diff > 60000) {
+		// 	//console.log("more than a minute difference");
+		// }
+		// else if(diff < 60000){
+		// 	//console.log("less than one minute ago");
+		// 	Tweet(tweets[i]).save();
+		// 	console.log('saved');
+		// }
+	//};
+	//if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
 };
 
 
@@ -281,8 +348,14 @@ function getCoordinates(req, res, next){
 
 
 function getTweetsFromDB(req, res) {
-	Tweet.find({'twitter.username': req.user.username}, function(err, tweets) {
+	console.log("user name from backend");
+	// console.log(req.user.twitter.username);
+	// req.user.twitter.username
+
+	Tweet.find({'user.screen_name': req.user.twitter.username}, function(err, tweets) {
 		if (err){
+			console.log("err");
+			console.log(err);
 			return done(err);
 		}
 		else{
@@ -292,6 +365,44 @@ function getTweetsFromDB(req, res) {
 		}
 	});
 }
+
+
+
+
+// function termImportance(req, res){
+// 	var TfIdf = natural.TfIdf;
+// 	var tfidf = new TfIdf();
+// 	console.log("req.user.username");
+// 	console.log(req.user.username);
+
+// 	Tweet.find({'twitter.username': req.user.username}, function(err, tweets) {
+// 		if (err){
+// 			return done(err);
+// 		}
+// 		else{
+// 			console.log("Found Tweets in DB");
+// 			console.log(tweets);
+// 			for (var i = 0; i < tweets.length; i++) {
+// 				tfidf.addDocument(tweets[i]);
+// 			};
+// 			console.log('node --------------------------------');
+// 			tfidf.tfidfs('hi', function(i, measure) {
+// 				console.log('document #' + i + ' is ' + measure);
+// 			});
+
+// 			res.json(tweets);
+// 		}
+// 	});
+
+
+
+// }
+
+
+
+
+
+
 
 //}
 
