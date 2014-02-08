@@ -185,7 +185,7 @@ function scheduleCronJob(req, res) {
 						console.log(data);
 					});
 				}
-
+				res.status(200);
 				//res.json(tweets);	
 			}
 		});
