@@ -124,7 +124,7 @@ function getSentiment(req, res, next){
 			var position = positionInDictionary(token);
 			var parsedScore = parseInt(scores[position]);
 			if(!isNaN(parsedScore)){
-				totalScore += parsedScore;	
+				totalScore += parsedScore*10;	
 			}
 		}
 		return totalScore;
@@ -154,7 +154,7 @@ function scheduleCronJob(req, res) {
 	// 		})
 	// 	});	
 
-	// }, function (err) {
+	// }, funfction (err) {
  // 		console.log("Finished!");
  // 		req.params['tweets'] = tweets;
  //  		saveTweets(req, res, function(tweets) {
