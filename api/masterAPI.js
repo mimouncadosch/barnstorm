@@ -352,64 +352,44 @@ function getCoordinates(req, res, next){
 
 function getTweetsFromDB(req, res) {
 	console.log("user name from backend");
-	// console.log(req.user.twitter.username);
-	// req.user.twitter.username
-
-	// Tweet.find({'user.screen_name': req.user.twitter.username}, function(err, tweets) {
-	// 	if (err){
-	// 		console.log("err");
-	// 		console.log(err);
-	// 		return done(err);
-	// 	}
-	// 	else{
-	// 		console.log("Sending Tweets from DB");
-	// 		console.log(tweets);
-	// 		res.json(tweets);	
-	// 	}
-	// });
-
+	console.log("req.user");
+	console.log(req.user);
 	var tweetsArray = [];
+	
+	if(!req.user){
+		res.send('error! must be logged in!');
+		res.end();
+	}
+	
+	else if (req.user){
+		Tweet.find({}, function (err, tweets) {
+			for (var i = 0; i < tweets.length; i++) {
+				
+					if (tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || (tweets[i].text.indexOf(req.user.twitter.username != -1))) 
+					{
+						console.log('user mentioned in tweet or user posted him/herself');
 
-	Tweet.find({}, function (err, tweets) {
+						var username = req.user.twitter.username;
 
-		for (var i = 0; i < tweets.length; i++) {
+						if (tweets[i].user.screen_name == username) {
+							console.log("by me " + tweets[i].text);
+							tweetsArray.push(tweets[i]);
+						} else if (tweets[i].text.indexOf(username) != -1) {
+							console.log('it talks about me');
+							console.log(tweets[i].text.indexOf(username) != -1) ;
 
-
-			// console.log("part 1");
-			// console.log(tweets[i].user.screen_name);
-			// console.log(req.user.twitter.username);
-			// console.log("cond 1");
-			// console.log(tweets[i].user.screen_name.indexOf(req.user.twitter.username));
-			// console.log(tweets[i].user.screen_name.indexOf(req.user.twitter.username) != -1);
-
-			// console.log("part 2");
-			// console.log(tweets[i].text);
-			// console.log(req.user.twitter.username);
-			// console.log(tweets[i].text.indexOf(req.user.twitter.username != -1));
-
-			if (tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || (tweets[i].text.indexOf(req.user.twitter.username != -1))) 
-				{
-					console.log('user mentioned in tweet or user posted him/herself');
-
-				var username = req.user.twitter.username;
-
-				if (tweets[i].user.screen_name == username) {
-					console.log("by me " + tweets[i].text);
-					tweetsArray.push(tweets[i]);
-				} else if (tweets[i].text.indexOf(username) != -1) {
-					console.log('it talks about me');
-					console.log(tweets[i].text.indexOf(username) != -1) ;
-
-					tweetsArray.push(tweets[i]);
-				} else {
-					console.log('user netither mentioned in tweet or user posted him/herself');
-					console.log(tweets[i]);
-					//tweetsArray.push(tweets[i]);
-				}
+							tweetsArray.push(tweets[i]);
+						} else {
+							console.log('user netither mentioned in tweet or user posted him/herself');
+							console.log(tweets[i]);
+						//tweetsArray.push(tweets[i]);
+						}
+					}
 			}
-		}
-		res.json(tweetsArray);
-	});
+			res.json(tweetsArray);
+		});
+	}
+
 }
 
 
