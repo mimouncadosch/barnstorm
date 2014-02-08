@@ -46,6 +46,15 @@ body {
   width: 50%;
 }
 
+#table_header{
+  font-size: 20px;
+}
+
+/*#price-table tr td {
+    font-size: 50px;
+  }*/
+
+
 /* d3 graph display */
 
 /* tell the SVG path to be a thin blue line without any area fill */
