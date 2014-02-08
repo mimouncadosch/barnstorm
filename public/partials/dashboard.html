@@ -4,22 +4,14 @@
 		<ul class="nav masthead-nav">
 			<li><a href="/">Home</a></li>
 			<li class="active" ><a href="/dashboard">Dashboard</a></li>
-			<li><a href="/profile">Profile</a></li>
+			<li><a href="/map">Map</a></li>
 		</ul>
 	</div>
 </div>
 <div class="inner cover" >
 	<h2>Dashboard</h2>
-
-	<ul class="nav nav-pills">
-	  <li class="active"><a ng-click="map = true">Map</a></li>
-	  <li><a ng-click="map = false">Graph</a></li>
-	</ul>
-
 	<div class="container-fluid">
-		<div ng-show="map" id="map-canvas"></div>
-
-		id="graph" class="aGraph"
+		<div id="graph" class="aGraph"></div>
 	</div>
 </div>
 <div class="mastfoot">

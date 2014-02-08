@@ -24,8 +24,6 @@ controller('landingCtrl', function ($scope, $http) {
 	}).
 controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth, GoogleMap) {
 	
-	//console.log("I'm in Map Controller");
-	var map = GoogleMap.createMap();
 	
 	$scope.getTweets = function() {
 		console.log("calling getTweets in front end");
@@ -35,32 +33,14 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 		}).success(function (data, status, headers, config) {
 			console.log('success');
 			draw(data);
-			GoogleMap.fillMap(data, map);
+	
 		}).error(function (data, status, headers, config) {
 			console.log(data);
 		});			
 	}
-	$scope.getTweets();
-	console.log("reply text");
-	$scope.reply = {username: 'freeslugs'};
-	//console.log($scope.reply.text);
-	//$scope.reply.text = 'I like your policies';
 
-	$scope.replyTweet = function() {
-		console.log("replying to tweets");
-		$http({
-			method: 'POST',
-			url: '/reply',
-			params: $scope.reply
-		}).success(function (data, status, headers, config) {
-			console.log(data);
-		}).error(function (data, status, headers, config) {
-			console.log(data);
-		});		
 
-	}
-
-		function draw(tweets){
+	function draw(tweets){
 			console.log(tweets);
 			var margin = {top: 20, right: 20, bottom: 30, left: 50},
 			    width = 960 - margin.left - margin.right,
@@ -105,10 +85,7 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 			      
 			  });
 
-			  //console.log(data);
-
-
-			  x.domain(d3.extent(data, function(d) { return d.date; }));
+			    x.domain(d3.extent(data, function(d) { return d.date; }));
 			  y.domain(d3.extent(data, function(d) { return d.close; }));
 
 			  svg.append("g")
@@ -131,8 +108,60 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 			      .attr("class", "line")
 			      .attr("d", line);
 			  }
-}).
 
+	
+	$scope.getTweets();
+	
+
+	
+
+}).
+controller('mapCtrl', function ($rootScope, $scope, $http, $location, auth, GoogleMap) {
+
+
+	//console.log("I'm in Map Controller");
+	var map = GoogleMap.createMap();
+
+	$scope.getTweets = function() {
+		console.log("calling getTweets in front end");
+		$http({
+			method: 'GET',
+			url: '/api/db'
+		}).success(function (data, status, headers, config) {
+			console.log('success');
+			GoogleMap.fillMap(data, map);
+		}).error(function (data, status, headers, config) {
+			console.log(data);
+		});			
+	}
+
+
+
+
+	console.log("reply text");
+	$scope.reply = {username: 'freeslugs'};
+	//console.log($scope.reply.text);
+	//$scope.reply.text = 'I like your policies';
+
+	$scope.replyTweet = function() {
+		console.log("replying to tweets");
+		$http({
+			method: 'POST',
+			url: '/reply',
+			params: $scope.reply
+		}).success(function (data, status, headers, config) {
+			console.log(data);
+		}).error(function (data, status, headers, config) {
+			console.log(data);
+		});		
+
+	}
+	
+		$scope.getTweets();
+	
+
+
+}).
 controller('profileCtrl', function ($scope, $http, $location, auth) {
 	$scope.$watch('user', function(newValue) {
 		if($scope.user) {
