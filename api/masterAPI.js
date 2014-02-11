@@ -10,6 +10,7 @@ var natural = require('natural');
 var queryString = require('querystring');
 var moment = require('moment');
 var request = require('request');
+var cronJob = require('cron').CronJob;
 moment().format();
 
 //models
@@ -32,10 +33,10 @@ var tokenizer = new natural.WordTokenizer();
 module.exports = {
 	getTweets: getTweets,
 	getSentiment: getSentiment,
-	cronJob : cronJob,
+	// cronJob : cronJob,
 	getTweetsFromDB: getTweetsFromDB,
 	getCoordinates: getCoordinates, 
-	scheduleCronJob: scheduleCronJob,
+	//scheduleCronJob: scheduleCronJob,
 	replyTweet: replyTweet,
 	termImportance: termImportance,
 	donateToUs: donateToUs
@@ -46,16 +47,11 @@ module.exports = {
  *
  * @return {array of objects} the array of tweets
  */
-function getTweets(req, res, next){
-	var username = req.param('q');
-	console.log('get tweets ' + username);
+function getTweets(username, callback){
 	T.get('search/tweets', { q: "to:" + username + ' OR ' + "from:" + username, count: 15},  function (err, results) {
-		//console.log('results');
-		//console.log(results);
 		var tweetArray = [];
 		for (var i = 0; i < results.statuses.length; i++) {
 			var item = results.statuses[i];
-			//console.log(item.user);
 			var tweet = {
 				user: {
 					name: item.user.name,
@@ -72,18 +68,16 @@ function getTweets(req, res, next){
 			};
 			tweetArray.push(tweet);
 		}
-		// res.json(tweetArray);
-		if(typeof(next) == "function") { next(tweetArray); } else { res.json(tweetArray); }
+		callback(tweetArray);
 	});
 }
 
 /**
  * gets sentiment of text
  * 
- * @return {array} the array of texts
+ * @return {integer} the score of the text
  */
-function getSentiment(req, res, next){
-	var text = req.param('text');
+function getSentiment(text, callback){
 
 	var words = [];
 	var scores = [];
@@ -100,11 +94,13 @@ function getSentiment(req, res, next){
 
 		var tokenizedText = tokenizeText(text);
 		var score = computeScore(tokenizedText);
-		if(next) { next(score); } else { res.json(score); }
+		callback(score);
 
 	});
 
 	var tokenizeText = function(text){
+		// console.log('this is the text');
+		// console.log(text);
 		var tokenizedText = tokenizer.tokenize(text);
 		return tokenizedText;
 	}
@@ -133,132 +129,113 @@ function getSentiment(req, res, next){
 		return totalScore;
 	}
 };
-function scheduleCronJob(req, res) {
-	console.log('start cron job schedular');
-	var rulesArray = [];
-	// create array of minutes
-	for (var i = 0; i < 60; i++) {
-		rulesArray.push(i);
-	};
+// function scheduleCronJob() {
+// 	console.log('start cron job schedular');
+	// var rulesArray = [];
+	// // create array of minutes
+	// for (var i = 0; i < 60; i++) {
+	// 	rulesArray.push(i);
+	// };
 
-
-
-	// async.forEachSeries(tweets, function(tweet, callback) {
-	// 	var text = tweet.text;
-	// 	//console.log(text);
-	// 	req.params['text'] = text; 
-	// 	getSentiment(req, res, function(score) {
-	// 		//console.log(text + score);
-	// 		tweet.sentiment = score;
-	// 		req.params['location'] = tweet.user.location;
-	// 		getCoordinates(req, res, function(coordinates) {
-	// 			tweet.user.coordinates = coordinates;
-	// 			callback();
-	// 		})
-	// 	});	
-
-	// }, funfction (err) {
- // 		console.log("Finished!");
- // 		req.params['tweets'] = tweets;
- //  		saveTweets(req, res, function(tweets) {
- //  			if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
- //  		});
-	// });
-
-
-
-	for (var i = 0; i < rulesArray.length; i++) {
-		var rule = new schedule.RecurrenceRule();
-	};
-	schedule.scheduleJob(rule, function(){
-
-		User.find({}, function(err, users) {
-			if (err){
-				return done(err);
-			}
-			else{
-
-				async.forEachSeries(users, function(user, callback) {
-					
-					req.params['q'] = user.twitter.username;
-					cronJob(req, res, function(data) {
-						console.log('got user. heres the data.')
-						console.log(data);						
-						//"j: " + j);
-						// console.log(data);
-						callback();
-					});
-				}, function (err, tweets) {
-			 		console.log("Finished scheduling a cron for all the users!");
-			 		req.params['tweets'] = tweets;
-			  		//if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
-			  		res.json(tweets);
+	// for (var i = 0; i < rulesArray.length; i++) {
+	// 	var rule = new schedule.RecurrenceRule();
+	// };
+	// schedule.scheduleJob(rule, function(){
+new cronJob('0 * * * * *', function() {
+	User.find({}, function(err, users) {
+		if (err){
+			return done(err);
+		}
+		else{
+			async.forEachSeries(users, function(user, cb1) {	
+				//var tweetArray = [];					
+				console.log('get tweets ' + user.twitter.username);
+				getTweets(user.twitter.username, function(tweetArray) {
+					//console.log('for each tweet, do shit');
+					//console.log(tweetArray);
+					async.forEachSeries(tweetArray, function(tweet, cb2) {
+						//console.log('get sentiment. heres the TWEET');
+					//	console.log(tweet.text);
+						getSentiment(tweet.text, function(score) {
+							tweet.sentiment = score;
+							// console.log('HERE IS THE TWEEET AND SCORE');
+							// console.log(tweet.text + " " + score);
+					// 		console.log('get coordinates');
+							getCoordinates(tweet.user.location, function(coordinates) {
+								tweet.coordinates = coordinates;
+								// console.log('save tweet');
+								saveTweet(tweet, function() {
+									//console.log('next');
+									console.log(tweet.text + " " + score);
+									cb2();
+								});
+							});								
+						});
+					}, function() {
+						cb1();
+					});			
 				});
+			});
+		} //else
+	});	// user find
+}, null, true);	
 
-		// Find all users from db	
-		
-				// console.log("CronJob for every user: ");
 
+// function cronJob(req, res, next) {
+// 	//var username = 'MPCadosch';
+// 	//req.params['q'] = req.param('q');
+// 	var tweetArray = [];
+// 	getTweets(req, res, function(tweets) {
+// 		async.forEachSeries(tweets, function(tweet, callback) {
+// 			var text = tweet.text;
+// 			//console.log(text);
+// 			req.params['text'] = text; 
+// 			getSentiment(req, res, function(score) {
+// 				//console.log(text + score);
+// 				tweet.sentiment = score;
+// 				req.params['location'] = tweet.user.location;
+// 				getCoordinates(req, res, function(coordinates) {
+// 					tweet.user.coordinates = coordinates;
+// 					tweetArray.push(tweet);
+// 					callback();
+// 				})
+// 			});	
 
-				// for (var j = 0; j < users.length; j++) {
-				// 	req.params['q'] = users[j].twitter.username;
-				// 	cronJob(req, res, function(data) {
-				// 		console.log('got user. heres the data.')
-				// 		console.log("j: " + j);
-				// 		console.log(data);
-				// 	});
-				// }
-				// res.status(200);
-				//res.json(tweets);	
-			}
+// 		}, function (err, data) {
+// 	 		console.log("Finished cronning a user!");
+// 	 		console.log(tweetArray.length);
+// 	 		req.params['tweets'] = tweetArray;
+// 	  		saveTweets(req, res, function(tweetArray) {
+// 	  			if(typeof(next) == "function") { next(tweetArray); } else { res.json(tweetArray); }
+// 	  		});
+// 		});
+
+// 	});	
+//}
+
+function saveTweet(tweet, callback) {
+	var tweet_date = Date.parse(tweet.created_at);
+	//console.log(tweet_date);
+
+	var now = moment()._d;
+	var now = Date.parse(now);
+	//console.log(now);
+
+	var diff = now - tweet_date;
+	//console.log(diff);
+
+	if(diff > 60000) {
+	//console.log("more than a minute difference");
+		//console.log('not saving');
+		callback();
+	}
+	else if(diff < 60000){
+		//console.log("less than one minute ago");
+		Tweet(tweet).save(function (err, tweet) {
+			console.log('saved ' + tweet.text);
+			callback();
 		});
-
-
-		// // console.log('The answer to life, the universe, and everything!');
-		// cronJob(req, res, function (data) {
-		// 	console.log('CronJob response');
-		// 	console.log(data);
-		// });
-    });
-}
-
-
-function cronJob(req, res, next) {
-	//var username = 'MPCadosch';
-	//req.params['q'] = req.param('q');
-	var tweetArray = [];
-	getTweets(req, res, function(tweets) {
-		async.forEachSeries(tweets, function(tweet, callback) {
-			var text = tweet.text;
-			//console.log(text);
-			req.params['text'] = text; 
-			getSentiment(req, res, function(score) {
-				//console.log(text + score);
-				tweet.sentiment = score;
-				req.params['location'] = tweet.user.location;
-				getCoordinates(req, res, function(coordinates) {
-					tweet.user.coordinates = coordinates;
-					tweetArray.push(tweet);
-					callback();
-				})
-			});	
-
-		}, function (err, data) {
-	 		console.log("Finished cronning a user!");
-	 		console.log(tweetArray.length);
-	 		req.params['tweets'] = tweetArray;
-	  		saveTweets(req, res, function(tweetArray) {
-	  			if(typeof(next) == "function") { next(tweetArray); } else { res.json(tweetArray); }
-	  		});
-		});
-
-	});	
-}
-
-function saveTweets(req, res, next) {
-	console.log('save tweets');
-	var tweetsArray = req.param('tweets');
-	async.forEachSeries(tweetsArray, function(tweet, callback) {
+	}
 		// Tweet.find({}, function(err, tweets) {
 		// 	if(tweets.indexOf(tweet) == -1) {
 		// 		Tweet(tweet).save();
@@ -267,67 +244,10 @@ function saveTweets(req, res, next) {
 		// 	}
 		// 	callback();
 		// });
-
-
-		var tweet_date = Date.parse(tweet.created_at);
-		//console.log(tweet_date);
-
-		var now = moment()._d;
-		var now = Date.parse(now);
-		//console.log(now);
-
-		var diff = now - tweet_date;
-		//console.log(diff);
-
-		if(diff > 60000) {
-		//console.log("more than a minute difference");
-			console.log('not saving');
-			callback();
-		}
-		else if(diff < 60000){
-			//console.log("less than one minute ago");
-			Tweet(tweet).save(function (err, tweet) {
-				console.log('saved');
-				callback();
-			});
-		}
-
-	}, function (err) {
- 		console.log("Finished saving!");
- 		tweets = req.param('tweets');
- 		//console.log('is tweets going through saving? ');
- 		//console.log(tweets.length);
-  		if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
-  		
-	});
-
-	//for (var i = tweets.length - 1; i >= 0; i--) {
-		// var tweet_date = Date.parse(tweets[i].created_at);
-		// //console.log(tweet_date);
-
-		// var now = moment()._d;
-		// var now = Date.parse(now);
-		// //console.log(now);
-
-		// var diff = now - tweet_date;
-		// //console.log(diff);
-
-		// if(diff > 60000) {
-		// 	//console.log("more than a minute difference");
-		// }
-		// else if(diff < 60000){
-		// 	//console.log("less than one minute ago");
-		// 	Tweet(tweets[i]).save();
-		// 	console.log('saved');
-		// }
-	//};
-	//if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
 };
 
 
-function getCoordinates(req, res, next){
-
-	var location = req.param('location');
+function getCoordinates(location, callback){
 
 	var geocoding = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + location + "&sensor=false";
 
@@ -345,7 +265,7 @@ function getCoordinates(req, res, next){
 		else if(!(parsed_content.results[0])){
 			var coordinates = null;
 		}
-		if(typeof(next) == "function") { next(coordinates); } else { res.json(coordinates); }
+		callback(coordinates);
 	})
 }
 
@@ -556,6 +476,39 @@ function donateToUs(req, res) {
 	// request('http://127.0.0.1:3000/api/getTweets', function (error, response, data) {
 	// 	console.log(data);
 	// })	
+	// 
+	// 
+	// 
+
+				// 	cronJob() {
+				// 		console.log('got user. heres the data.')
+				// 		console.log(data);						
+				// 		//"j: " + j);
+				// 		// console.log(data);
+				// 		callback();
+				// 	});
+				// }, function (err, tweets) {
+			 // 		console.log("Finished scheduling a cron for all the users!");
+			 // 		req.params['tweets'] = tweets;
+			 //  		//if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
+			 //  		res.json(tweets);
+				// });
+
+		// Find all users from db	
+		
+				// console.log("CronJob for every user: ");
+
+
+				// for (var j = 0; j < users.length; j++) {
+				// 	req.params['q'] = users[j].twitter.username;
+				// 	cronJob(req, res, function(data) {
+				// 		console.log('got user. heres the data.')
+				// 		console.log("j: " + j);
+				// 		console.log(data);
+				// 	});
+				// }
+				// res.status(200);
+				//res.json(tweets);	
 
 
 
