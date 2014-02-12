@@ -13,12 +13,12 @@ var tweetSchema =  new Schema({
         location        				: String,
         url         					: String,
         followers_count					: Number,
-        profile_background_image_url	: String,
-        coordinates                     : { lat: Number, lng: Number}
+        profile_background_image_url	: String
     },
     text: String,
 	created_at: Date,
-	sentiment: Number
+	sentiment: Number,
+    coordinates : { lat: Number, lng: Number}
 });
 
 module.exports = mongoose.model('Tweet', tweetSchema);
