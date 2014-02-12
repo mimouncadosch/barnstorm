@@ -74,8 +74,6 @@ myModule.factory('GoogleMap', function($http){
 
     fillMap: function(tweets, map){
 
-
-
       var locations = [];
       for (var i = 0; i < tweets.length; i++) {
         locations.push(tweets[i].coordinates);
@@ -118,22 +116,60 @@ myModule.factory('GoogleMap', function($http){
       }
     }
 
-    function AutoCenter() {
-      //  Create a new viewpoint bound
-      var bounds = new google.maps.LatLngBounds();
-      //  Go through each...
-      $.each(markers, function (index, marker) {
-        bounds.extend(marker.position);
-      });
-      //  Fit these bounds to the map
-      map.fitBounds(bounds);
-    }
+      function AutoCenter() {
+        //  Create a new viewpoint bound
+        var bounds = new google.maps.LatLngBounds();
+        //  Go through each...
+        $.each(markers, function (index, marker) {
+          bounds.extend(marker.position);
+        });
+        //  Fit these bounds to the map
+        map.fitBounds(bounds);
+      }
+    
       AutoCenter();
-
-
     }
 
 	}
+});
+
+
+
+myModule.factory('Dates', function($http){
+  return {
+    // Formats & simplifies date for the graph
+    formatDate: function(date){
+
+      function formatMonth(month){
+        if(month == 0)
+          return "Jan";
+        if(month == 1)
+          return "Feb";
+      }
+      function formatDay(day){
+        if(day == 0)
+          return "Sun";
+        if(day == 1)
+          return "Mon";
+        if(day == 2)
+          return "Tue";
+      }
+
+      //Create JS Date object
+      var myDate = new Date(date);
+
+      var date_of_month = myDate.getDate();
+      var hours = myDate.getHours();
+      var minutes = myDate.getMinutes();
+      var month = formatMonth(myDate.getMonth());
+      var day_of_week = formatDay(myDate.getDay());
+
+      var formattedDate = day_of_week + ", " + month + " " + date_of_month + ", " + hours + ":" + minutes;
+
+      return formattedDate;
+    }
+  }
+
 });
 
         // var markerArray = [];

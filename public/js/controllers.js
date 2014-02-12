@@ -23,7 +23,7 @@ controller('landingCtrl', function ($scope, $http) {
 
 
 	}).
-controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth, GoogleMap) {
+controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth, GoogleMap, Dates) {
 	
 	
 	$scope.getTweets = function() {
@@ -33,6 +33,7 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 			url: '/api/db'
 		}).success(function (data, status, headers, config) {
 			console.log('success');
+			console.log(data);
 			draw(data);
 	
 		}).error(function (data, status, headers, config) {
@@ -40,76 +41,51 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 		});			
 	}
 
-
 	function draw(tweets){
-			console.log(tweets);
-			var margin = {top: 30, right: 30, bottom: 30, left: 40},
-			    width = 700 - margin.left - margin.right,
-			    height = 450 - margin.top - margin.bottom;
+			console.log("Calling draw tweets");
 
+			// console.log(Dates.formatDate(tweets[0].created_at));
+	
+			var sentimentArray = [];
+			for (var i = 0; i < tweets.length; i++) {
+				sentimentArray.push(tweets[i].sentiment);
+				// console.log("tweets[i].sentiment" + tweets[i].sentiment);
+			};
 
-			var x = d3.time.scale()
-			    .range([0, width])
+			var datesArray = [];
+			for (var i = 0; i < tweets.length; i++) {
+				var myDate = Dates.formatDate(tweets[i].created_at);
+				datesArray.push(myDate);
+				// console.log("tweets[i].sentiment" + tweets[i].sentiment);
+			};
+			/**
+			* Drawing function here
+			*/
 
-			var y = d3.scale.linear()
-			    .range([height, 0]);
+			var lineChartData = {
+				labels : datesArray,
+				datasets : [
+				{
+					fillColor : "rgba(220,220,220,0.5)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					data : sentimentArray
+				}
+				// ,
+				// {
+				// 	fillColor : "rgba(151,187,205,0.5)",
+				// 	strokeColor : "rgba(151,187,205,1)",
+				// 	pointColor : "rgba(151,187,205,1)",
+				// 	pointStrokeColor : "#fff",
+				// 	data : [28,48,40,19,96,27,100]
+				// }
+				]
 
-			var xAxis = d3.svg.axis()
-			    .scale(x)
-			    .orient("bottom");
+			}
+			var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
 
-			var yAxis = d3.svg.axis()
-			    .scale(y)
-			    .orient("left");
-
-			var line = d3.svg.line()
-			    .x(function(d) { return x(d.date); })
-			    .y(function(d) { return y(d.close); });
-
-			var svg = d3.select("#graph").append("svg")
-			    .attr("width", width + margin.left + margin.right)
-			    .attr("height", height + margin.top + margin.bottom)
-			  	.append("g")
-			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-			  var data = tweets.map(function(d) {
-			  	//Fri Feb 07 21:17:24 +0000 2014
-			  	// "2014-02-08T09:26:37.000Z"
-			  	// var format = d3.time.format("%a %b %d %H:%M:%S %Z %Y"); // "%a %b %d %H:%M:%S %Z %Y
-			  	//console.log(format.parse(d.created_at));
-			  	//console.log(format.parse("Fri Feb 07 21:17:24 +0000 2014"));
-			      return {
-			         // date: format.parse(d.created_at),  //
-			         date : new Date(d.created_at),
-			         close: d.sentiment
-			      };
-			      
-			  });
-
-			    x.domain(d3.extent(data, function(d) { return d.date; }));
-			  y.domain(d3.extent(data, function(d) { return d.close; }));
-
-			  svg.append("g")
-			      .attr("class", "x axis")
-			      .attr("transform", "translate(0," + height + ")")
-			      .call(xAxis);
-
-			  svg.append("g")
-			      .attr("class", "y axis")
-			      .call(yAxis)
-			    .append("text")
-			      .attr("transform", "rotate(-90)")
-			      .attr("y", 6)
-			      .attr("dy", ".71em")
-			      .style("text-anchor", "end")
-			      .text("Sentiment");
-
-			  svg.append("path")
-			      .datum(data)
-			      .attr("class", "line")
-			      .attr("d", line);
-			  }
-
+	}
 	
 	$scope.getTweets();
 	
@@ -215,3 +191,69 @@ controller('profileCtrl', function ($scope, $http, $location, auth) {
 
 
 
+// var margin = {top: 30, right: 30, bottom: 30, left: 40},
+// 			    width = 700 - margin.left - margin.right,
+// 			    height = 450 - margin.top - margin.bottom;
+
+
+// 			var x = d3.time.scale()
+// 			    .range([0, width])
+
+// 			var y = d3.scale.linear()
+// 			    .range([height, 0]);
+
+// 			var xAxis = d3.svg.axis()
+// 			    .scale(x)
+// 			    .orient("bottom");
+
+// 			var yAxis = d3.svg.axis()
+// 			    .scale(y)
+// 			    .orient("left");
+
+// 			var line = d3.svg.line()
+// 			    .x(function(d) { return x(d.date); })
+// 			    .y(function(d) { return y(d.close); });
+
+// 			var svg = d3.select("#graph").append("svg")
+// 			    .attr("width", width + margin.left + margin.right)
+// 			    .attr("height", height + margin.top + margin.bottom)
+// 			  	.append("g")
+// 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// 			  var data = tweets.map(function(d) {
+// 			  	//Fri Feb 07 21:17:24 +0000 2014
+// 			  	// "2014-02-08T09:26:37.000Z"
+// 			  	// var format = d3.time.format("%a %b %d %H:%M:%S %Z %Y"); // "%a %b %d %H:%M:%S %Z %Y
+// 			  	//console.log(format.parse(d.created_at));
+// 			  	//console.log(format.parse("Fri Feb 07 21:17:24 +0000 2014"));
+// 			      return {
+// 			         // date: format.parse(d.created_at),  //
+// 			         date : new Date(d.created_at),
+// 			         close: d.sentiment
+// 			      };
+			      
+// 			  });
+
+// 			    x.domain(d3.extent(data, function(d) { return d.date; }));
+// 			  y.domain(d3.extent(data, function(d) { return d.close; }));
+
+// 			  svg.append("g")
+// 			      .attr("class", "x axis")
+// 			      .attr("transform", "translate(0," + height + ")")
+// 			      .call(xAxis);
+
+// 			  svg.append("g")
+// 			      .attr("class", "y axis")
+// 			      .call(yAxis)
+// 			    .append("text")
+// 			      .attr("transform", "rotate(-90)")
+// 			      .attr("y", 6)
+// 			      .attr("dy", ".71em")
+// 			      .style("text-anchor", "end")
+// 			      .text("Sentiment");
+
+// 			  svg.append("path")
+// 			      .datum(data)
+// 			      .attr("class", "line")
+// 			      .attr("d", line);
+// 			  }
