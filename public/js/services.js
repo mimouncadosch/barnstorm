@@ -143,6 +143,29 @@ myModule.factory('Dates', function($http){
           return "Jan";
         if(month == 1)
           return "Feb";
+        if(month == 2)
+          return "Feb";
+        if(month == 3)
+          return "Mars";
+        if(month == 4)
+          return "Apr";
+        if(month == 5)
+          return "May";
+        if(month == 6)
+          return "Jun";
+        if(month == 7)
+          return "Jul";
+        if(month == 8)
+          return "Aug";
+        if(month == 9)
+          return "Sep";
+        if(month == 10)
+          return "Oct";
+        if(month == 11)
+          return "Nov";
+        if(month == 12)
+          return "Dec";
+
       }
       function formatDay(day){
         if(day == 0)
@@ -151,6 +174,14 @@ myModule.factory('Dates', function($http){
           return "Mon";
         if(day == 2)
           return "Tue";
+        if(day == 3)
+          return "Wed";
+        if(day == 4)
+          return "Thu";
+        if(day == 5)
+          return "Fri";
+        if(day == 6)
+          return "Sat";
       }
 
       //Create JS Date object
