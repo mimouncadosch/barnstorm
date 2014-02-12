@@ -43,6 +43,47 @@ module.exports = {
 }
 
 /**
+ * creates a cron job, every minute
+ */
+new cronJob('0 * * * * *', function() {
+	// find all users
+	User.find({}, function(err, users) {
+		// error handling
+		if (err){
+			return done(err);
+		}
+		else{
+			// async loop for each user
+			async.forEachSeries(users, function(user, cb1) {				
+				console.log('get tweets ' + user.twitter.username);
+				// get the tweets for each user
+				getTweets(user.twitter.username, function(tweetArray) {
+					// for each tweet, anaylze sentiment and get coordinates
+					async.forEachSeries(tweetArray, function(tweet, cb2) {
+						// anaylze sentiment, nlp
+						getSentiment(tweet.text, function(score) {
+							tweet.sentiment = score;
+							// get coordinates of person who tweeted
+							getCoordinates(tweet.user.location, function(coordinates) {
+								tweet.coordinates = coordinates;
+								// if its a recent tweet save 
+								saveTweet(tweet, function() {
+									// callback for the inner loop
+									cb2();
+								});
+							});								
+						});
+					}, function() {
+						// callback for the outer loop
+						cb1();
+					});			
+				});
+			});
+		} //else
+	});	// user find
+}, null, true);	
+
+/**
  * gets tweets from twitter using twit
  * To also pull tweets from user, + ' OR ' + "from:" + username
  * @return {array of objects} the array of tweets
@@ -62,7 +103,6 @@ function getTweets(username, callback){
 					profile_background_image_url: item.user.profile_background_image_url, 
 				},
 				text: item.text,
-				// location: , 
 				created_at: item.created_at,
 				sentiment: 0
 			};
@@ -99,8 +139,6 @@ function getSentiment(text, callback){
 	});
 
 	var tokenizeText = function(text){
-		// console.log('this is the text');
-		// console.log(text);
 		var tokenizedText = tokenizer.tokenize(text);
 		return tokenizedText;
 	}
@@ -129,136 +167,6 @@ function getSentiment(text, callback){
 		return totalScore;
 	}
 };
-// function scheduleCronJob() {
-// 	console.log('start cron job schedular');
-	// var rulesArray = [];
-	// // create array of minutes
-	// for (var i = 0; i < 60; i++) {
-	// 	rulesArray.push(i);
-	// };
-
-	// for (var i = 0; i < rulesArray.length; i++) {
-	// 	var rule = new schedule.RecurrenceRule();
-	// };
-	// schedule.scheduleJob(rule, function(){
-new cronJob('0 * * * * *', function() {
-	User.find({}, function(err, users) {
-		if (err){
-			return done(err);
-		}
-		else{
-			async.forEachSeries(users, function(user, cb1) {	
-				//var tweetArray = [];					
-				console.log('get tweets ' + user.twitter.username);
-				getTweets(user.twitter.username, function(tweetArray) {
-					//console.log('for each tweet, do shit');
-					//console.log(tweetArray);
-					async.forEachSeries(tweetArray, function(tweet, cb2) {
-						//console.log('get sentiment. heres the TWEET');
-					//	console.log(tweet.text);
-						getSentiment(tweet.text, function(score) {
-							tweet.sentiment = score;
-							// console.log('HERE IS THE TWEEET AND SCORE');
-							// console.log(tweet.text + " " + score);
-					// 		console.log('get coordinates');
-							getCoordinates(tweet.user.location, function(coordinates) {
-								tweet.coordinates = coordinates;
-								
-								// console.log('save tweet');
-								saveTweet(tweet, function() {
-									//console.log('next');'
-									// console.log("COORDINATES after THE save tweet in callback ");
-									// console.log(tweet.coordinates);
-									// console.log(tweet.coordinates.lat);
-									// console.log(tweet.coordinates.lng);
-									// console.log(tweet.text + " " + score);
-									cb2();
-								});
-							});								
-						});
-					}, function() {
-						cb1();
-					});			
-				});
-			});
-		} //else
-	});	// user find
-}, null, true);	
-
-
-// function cronJob(req, res, next) {
-// 	//var username = 'MPCadosch';
-// 	//req.params['q'] = req.param('q');
-// 	var tweetArray = [];
-// 	getTweets(req, res, function(tweets) {
-// 		async.forEachSeries(tweets, function(tweet, callback) {
-// 			var text = tweet.text;
-// 			//console.log(text);
-// 			req.params['text'] = text; 
-// 			getSentiment(req, res, function(score) {
-// 				//console.log(text + score);
-// 				tweet.sentiment = score;
-// 				req.params['location'] = tweet.user.location;
-// 				getCoordinates(req, res, function(coordinates) {
-// 					tweet.user.coordinates = coordinates;
-// 					tweetArray.push(tweet);
-// 					callback();
-// 				})
-// 			});	
-
-// 		}, function (err, data) {
-// 	 		console.log("Finished cronning a user!");
-// 	 		console.log(tweetArray.length);
-// 	 		req.params['tweets'] = tweetArray;
-// 	  		saveTweets(req, res, function(tweetArray) {
-// 	  			if(typeof(next) == "function") { next(tweetArray); } else { res.json(tweetArray); }
-// 	  		});
-// 		});
-
-// 	});	
-//}
-
-function saveTweet(tweet, callback) {
-
-	// console.log('COORDINATES : at begin of save tweet');
-	// console.log(tweet);
-
-
-	var tweet_date = Date.parse(tweet.created_at);
-	//console.log(tweet_date);
-
-	var now = moment()._d;
-	var now = Date.parse(now);
-	//console.log(now);
-
-	var diff = now - tweet_date;
-	console.log(diff);
-
-	if(diff > 60000) {
-		// console.log("more than a minute difference");
-		// console.log('not saving');
-		callback();
-	}
-	else if(diff < 60000){
-		console.log("less than one minute ago");
-		Tweet(tweet).save(function (err, tweet) {
-			console.log('saved. TWEET '); 
-			//console.log(tweet);
-			// console.log('COORDINATES  after save tweet: ');
-			// console.log(tweet.coordinates.lat);
-			// console.log(tweet.coordinates.lng);
-			callback();
-		});
-	}
-		// Tweet.find({}, function(err, tweets) {
-		// 	if(tweets.indexOf(tweet) == -1) {
-		// 		Tweet(tweet).save();
-		// 		console.log('saved');
-		// 		console.log(tweet.text);
-		// 	}
-		// 	callback();
-		// });
-};
 
 
 function getCoordinates(location, callback){
@@ -273,6 +181,8 @@ function getCoordinates(location, callback){
 		var content = result.body;
 		var parsed_content = JSON.parse(content);
 
+		console.log(parsed_content.results[0].geometry.location);
+
 		if(parsed_content.results[0]){
 			var coordinates = parsed_content.results[0].geometry.location;	
 		}
@@ -283,6 +193,24 @@ function getCoordinates(location, callback){
 	})
 }
 
+
+function saveTweet(tweet, callback) {
+
+	var tweet_date = Date.parse(tweet.created_at);
+	var now = moment()._d;
+	var now = Date.parse(now);
+	var diff = now - tweet_date;
+
+	if(diff > 60000) {
+		callback();
+	}
+	else if(diff < 60000){
+		Tweet(tweet).save(function (err, tweet) {
+			console.log('saved. TWEET ' + tweet.text); 
+			callback();
+		});
+	}
+};
 
 function getTweetsFromDB(req, res) {
 	console.log("user name from backend");
