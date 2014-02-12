@@ -168,7 +168,12 @@ function getSentiment(text, callback){
 	}
 };
 
-
+/**
+ * gets the coordinates from a location
+ * @param  {String}   location the name of the place, ex. New York, NY
+ * @param  {Function} callback
+ * @return {Object}            object of coordinates containing lat & lng
+ */
 function getCoordinates(location, callback){
 
 	var geocoding = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + location + "&sensor=false";
@@ -193,7 +198,11 @@ function getCoordinates(location, callback){
 	})
 }
 
-
+/** 
+ * saves tweet to mongodb 
+ * @param  {Object}   tweet    da tweet object
+ * @param  {Function} callback 
+ */
 function saveTweet(tweet, callback) {
 
 	var tweet_date = Date.parse(tweet.created_at);
@@ -212,48 +221,38 @@ function saveTweet(tweet, callback) {
 	}
 };
 
+/**
+ * retrieves tweets from mongodb
+ * @return {Array}     Array of tweets 
+ */
 function getTweetsFromDB(req, res) {
-	console.log("user name from backend");
 	console.log("req.user");
 	console.log(req.user);
-	var tweetsArray = [];
-	
-	if(!req.user){
-		res.send('error! must be logged in!');
-		res.end();
-	}
-	
-	else if (req.user){
-		Tweet.find({}, function (err, tweets) {
-			for (var i = 0; i < tweets.length; i++) {
-				
-					if (tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || (tweets[i].text.indexOf(req.user.twitter.username != -1))) 
-					{
-						console.log('user mentioned in tweet or user posted him/herself');
+	var tweetsArray = [];	
+	Tweet.find({}, function (err, tweets) {
+		for (var i = 0; i < tweets.length; i++) {
+		
+			if (tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || (tweets[i].text.indexOf(req.user.twitter.username != -1))) 
+			{
+				// user mentioned in tweet or user posted him/herself
+				var username = req.user.twitter.username;
 
-						var username = req.user.twitter.username;
-
-						if (tweets[i].user.screen_name == username) {
-							console.log("by me " + tweets[i].text);
-							tweetsArray.push(tweets[i]);
-						} else if (tweets[i].text.indexOf(username) != -1) {
-							console.log('it talks about me');
-							console.log(tweets[i].text.indexOf(username) != -1) ;
-
-							tweetsArray.push(tweets[i]);
-						} else {
-							console.log('user netither mentioned in tweet or user posted him/herself');
-							console.log(tweets[i]);
-						//tweetsArray.push(tweets[i]);
-						}
-					}
+				if (tweets[i].user.screen_name == username) {
+					tweetsArray.push(tweets[i]);
+				} else if (tweets[i].text.indexOf(username) != -1) {
+					console.log(tweets[i].text.indexOf(username) != -1) ;
+					tweetsArray.push(tweets[i]);
+					// user netither mentioned in tweet or user posted him/herself
+				}
 			}
-			res.json(tweetsArray);
-		});
-	}
-
+		}
+		res.json(tweetsArray);
+	});
 }
 
+
+
+/***************** end of work by gilad **********************/
 
 
 function replyTweet(req, res){
@@ -335,103 +334,5 @@ function donateToUs(req, res) {
 		res.redirect('/thankyou');
 	});
 }
-
-
-
-// 
-//}
-
-		// for (var i = 0; i < tweets.length; i++) {
-		// 	var text = tweets[i].text;
-		// 	req.params['text'] = text; 
-		// 	getSentiment(req, res, function(score) {
-		//  	console.log(i);
-		// 		console.log(score);
-		// 	});
-		// 	//tweetsArray[i].sentiment = twitterScore;
-		// };
-		
-		// async.forEachSeries(tweets, function(tweet, callback) {
-		// 	var text = tweet.text;
-		// 	console.log(text);
-		// 	req.params['text'] = text; 
-		// 	//getSentiment(req, res, callback);
-		// 	getSentiment(req, res, function(score) {
-		// 		console.log(text + score);
-		// 		tweet.sentiment = score;
-		// 		callback();
-		// 	});
-
-		// }, function(err) {
-  //       	if (err) {
-  //       		console.log("we're done");
-  //       	}
-	 //        //Tell the user about the great success
-	 //        res.json(tweets);
-	 //        //saveTweets(tweets);
-	 //    });
-
-
-	// console.log("TWITTER SCORE");
-	// console.log(twitterScore);
-	// tweetsArray[i].sentiment = twitterScore;
-
-// 	var newTweet = new Tweet(tweetsArray[i]);
-// 	console.log("HERE IS WHERE WE MAKE SURE THAT TWEETS HAVEN'T BEEN CREATED ALREADY");
-// 	// console.log(newTweet);
-// 	// var d = Date.parse(newTweet.created_at);
-// 	var date = new Date(newTweet.created_at);
-// 	var minutes = date.getMinutes();
-// 	var hour = date.getHour();
-// 	console.log("MINUTES: ");
-// 	console.log(minutes);
-// 	// if(newTweet.created_at)
-// 	newTweet.save();
-// 	console.log("tweet added");
-// };
-
-// res.json(tweetsArray);
-//console.log(tweetsArray);
-
-
-
-	// request('http://127.0.0.1:3000/api/getTweets', function (error, response, data) {
-	// 	console.log(data);
-	// })	
-	// 
-	// 
-	// 
-
-				// 	cronJob() {
-				// 		console.log('got user. heres the data.')
-				// 		console.log(data);						
-				// 		//"j: " + j);
-				// 		// console.log(data);
-				// 		callback();
-				// 	});
-				// }, function (err, tweets) {
-			 // 		console.log("Finished scheduling a cron for all the users!");
-			 // 		req.params['tweets'] = tweets;
-			 //  		//if(typeof(next) == "function") { next(tweets); } else { res.json(tweets); }
-			 //  		res.json(tweets);
-				// });
-
-		// Find all users from db	
-		
-				// console.log("CronJob for every user: ");
-
-
-				// for (var j = 0; j < users.length; j++) {
-				// 	req.params['q'] = users[j].twitter.username;
-				// 	cronJob(req, res, function(data) {
-				// 		console.log('got user. heres the data.')
-				// 		console.log("j: " + j);
-				// 		console.log(data);
-				// 	});
-				// }
-				// res.status(200);
-				//res.json(tweets);	
-
-
 
 
