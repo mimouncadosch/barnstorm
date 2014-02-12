@@ -133,8 +133,6 @@ myModule.factory('GoogleMap', function($http){
 	}
 });
 
-
-
 myModule.factory('Dates', function($http){
   return {
     // Formats & simplifies date for the graph

@@ -107,6 +107,8 @@ controller('mapCtrl', function ($rootScope, $scope, $http, $location, auth, Goog
 		}).success(function (data, status, headers, config) {
 			console.log('success');
 			GoogleMap.fillMap(data, map);
+			console.log('tweets in map ctrl');
+			console.log(data)
 		}).error(function (data, status, headers, config) {
 			console.log(data);
 		});			

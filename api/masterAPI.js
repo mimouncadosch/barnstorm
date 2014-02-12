@@ -186,15 +186,19 @@ function getCoordinates(location, callback){
 		var content = result.body;
 		var parsed_content = JSON.parse(content);
 
-		console.log(parsed_content.results[0].geometry.location);
-
 		if(parsed_content.results[0]){
-			var coordinates = parsed_content.results[0].geometry.location;	
+			console.log(parsed_content.results[0].geometry.location);
+
+			if(parsed_content.results[0]){
+				var coordinates = parsed_content.results[0].geometry.location;	
+			}
+			else if(!(parsed_content.results[0])){
+				var coordinates = null;
+			}
+			callback(coordinates);
+			
 		}
-		else if(!(parsed_content.results[0])){
-			var coordinates = null;
-		}
-		callback(coordinates);
+		
 	})
 }
 
