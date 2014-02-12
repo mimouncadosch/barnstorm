@@ -43,9 +43,9 @@ myModule.factory('GoogleMap', function($http){
 
 			for (var i = 0; i < tweets.length; i++) {
            console.log(tweets[i]);
-          if(tweets[i].user.coordinates){
+          if(tweets[i].coordinates){
 
-              var myLatLng = new google.maps.LatLng(tweets[i].user.coordinates.lat, tweets[i].user.coordinates.lng);
+              var myLatLng = new google.maps.LatLng(tweets[i].coordinates.lat, tweets[i].coordinates.lng);
               var marker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,
@@ -78,7 +78,7 @@ myModule.factory('GoogleMap', function($http){
 
       var locations = [];
       for (var i = 0; i < tweets.length; i++) {
-        locations.push(tweets[i].user.coordinates);
+        locations.push(tweets[i].coordinates);
       };
 
       var infowindow = new google.maps.InfoWindow({
@@ -92,7 +92,7 @@ myModule.factory('GoogleMap', function($http){
       // Add the markers and infowindows to the map
       for (var i = 0; i < locations.length; i++) {  
 
-        if(tweets[i].user.coordinates){
+        if(tweets[i].coordinates){
           marker = new google.maps.Marker({
             position: new google.maps.LatLng(locations[i].lat, locations[i].lng),
             map: map
