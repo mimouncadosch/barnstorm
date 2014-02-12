@@ -18,18 +18,18 @@ myApp.config(function ($routeProvider, $locationProvider) {
 			templateUrl: 'partials/landing.html',
 			controller: 'landingCtrl'
 		}).
-		when('/dashboard', {
-			templateUrl: 'partials/dashboard.html',
-			controller: 'dashboardCtrl'
-		}).
-		when('/map', {
-			templateUrl: 'partials/map.html',
-			controller: 'mapCtrl'
-		}).
-		when('/profile', {
-			templateUrl: 'partials/profile.html',
-			controller: 'profileCtrl'
-		}).
+		// when('/dashboard', {
+		// 	templateUrl: 'partials/dashboard.html',
+		// 	controller: 'dashboardCtrl'
+		// }).
+		// when('/map', {
+		// 	templateUrl: 'partials/map.html',
+		// 	controller: 'mapCtrl'
+		// }).
+		// when('/profile', {
+		// 	templateUrl: 'partials/profile.html',
+		// 	controller: 'profileCtrl'
+		// }).
 		when('/features', {
 			templateUrl: 'partials/features.html',
 			controller: 'dashboardCtrl'
