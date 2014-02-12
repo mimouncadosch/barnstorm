@@ -44,11 +44,11 @@ module.exports = {
 
 /**
  * gets tweets from twitter using twit
- *
+ * To also pull tweets from user, + ' OR ' + "from:" + username
  * @return {array of objects} the array of tweets
  */
 function getTweets(username, callback){
-	T.get('search/tweets', { q: "to:" + username + ' OR ' + "from:" + username, count: 15},  function (err, results) {
+	T.get('search/tweets', { q: "to:" + username, count: 3}, function (err, results) {
 		var tweetArray = [];
 		for (var i = 0; i < results.statuses.length; i++) {
 			var item = results.statuses[i];
@@ -163,10 +163,15 @@ new cronJob('0 * * * * *', function() {
 					// 		console.log('get coordinates');
 							getCoordinates(tweet.user.location, function(coordinates) {
 								tweet.coordinates = coordinates;
+								
 								// console.log('save tweet');
 								saveTweet(tweet, function() {
-									//console.log('next');
-									console.log(tweet.text + " " + score);
+									//console.log('next');'
+									// console.log("COORDINATES after THE save tweet in callback ");
+									// console.log(tweet.coordinates);
+									// console.log(tweet.coordinates.lat);
+									// console.log(tweet.coordinates.lng);
+									// console.log(tweet.text + " " + score);
 									cb2();
 								});
 							});								
@@ -214,6 +219,11 @@ new cronJob('0 * * * * *', function() {
 //}
 
 function saveTweet(tweet, callback) {
+
+	// console.log('COORDINATES : at begin of save tweet');
+	// console.log(tweet);
+
+
 	var tweet_date = Date.parse(tweet.created_at);
 	//console.log(tweet_date);
 
@@ -222,17 +232,21 @@ function saveTweet(tweet, callback) {
 	//console.log(now);
 
 	var diff = now - tweet_date;
-	//console.log(diff);
+	console.log(diff);
 
 	if(diff > 60000) {
-	//console.log("more than a minute difference");
-		//console.log('not saving');
+		// console.log("more than a minute difference");
+		// console.log('not saving');
 		callback();
 	}
 	else if(diff < 60000){
-		//console.log("less than one minute ago");
+		console.log("less than one minute ago");
 		Tweet(tweet).save(function (err, tweet) {
-			console.log('saved ' + tweet.text);
+			console.log('saved. TWEET '); 
+			//console.log(tweet);
+			// console.log('COORDINATES  after save tweet: ');
+			// console.log(tweet.coordinates.lat);
+			// console.log(tweet.coordinates.lng);
 			callback();
 		});
 	}
