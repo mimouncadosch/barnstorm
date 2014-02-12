@@ -14,7 +14,7 @@ var User = require('../api/models/user.js');
 module.exports = passport.use(new TwitterStrategy({
   consumerKey: "yxDatKN48oYTeKqOft5ciA",
   consumerSecret: "9xwrzRwL2D53iXTxNQ8hSQ95TydiJo2n5dGzkBHYXBI",
-  callbackURL: "http://mysterious-reaches-6748.herokuapp.com/auth/twitter/callback" //http://tweetthepress.heroku.com/auth/twitter/callback
+  callbackURL: "http://127.0.0.1:3000/auth/twitter/callback" //http://tweetthepress.heroku.com/auth/twitter/callback
 },
   function(token, tokenSecret, profile, done) {
     //console.log(profile);
