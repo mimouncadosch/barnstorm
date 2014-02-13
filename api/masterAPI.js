@@ -272,13 +272,55 @@ function replyTweet(req, res){
 
 }
 
-
 function termImportance(req, res){
+	var TfIdf = natural.TfIdf;
+	var tfidf = new TfIdf();
+
+	// Add all tweets to corpus, and find relevance of single world to entire corpus
+	var corpus;
+	var word_importance;
+	Tweet.find({}, function(err, tweets) {
+
+		if (err){
+			return done(err);
+		}
+		else{
+			console.log("Found Tweets in DB");
+			// console.log(tweets);
+
+			for (var i = 0; i < tweets.length; i++) {
+				tfidf.addDocument(tweets[i].text);
+				console.log(tweets[i].text);
+			};
+			
+			console.log('Adding scores ------------------------------------------');
+			var word = "best";
+			var word_score = 0;
+			tfidf.tfidfs(word, function(i, measure) {
+				console.log('document #' + i + ' is ' + measure);
+				word_score += measure;
+			});
+
+			var word_importance = {
+				word: word,
+				score: word_score
+			};
+			console.log("WORD_IMPORTANCE");
+			console.log(word_importance);
+		}
+	});
+	return word_importance;
+}
+
+
+function termImportance_old(req, res){
 	var TfIdf = natural.TfIdf;
 	var tfidf = new TfIdf();
 	console.log("req.user.username");
 	console.log(req.user.username);
-	var wordImportance = [];
+	
+	// Add all tweets to corpus, and find relevance of single world to entire corpus
+	var corpus = [];
 
 	Tweet.find({}, function(err, tweets) {
 
@@ -289,11 +331,17 @@ function termImportance(req, res){
 			console.log("Found Tweets in DB");
 			// console.log(tweets);
 
-			// Add documents to trainer
+			// Add tweets to corpus
 			for (var i = 0; i < tweets.length; i++) {
-				tfidf.addDocument(tweets[i].text);
-			}
+				corpus.push(tweets[i]);
+			};
 
+			
+			// Add documents to trainer
+			tfidf.addDocument(corpus);
+			// for (var i = 0; i < tweets.length; i++) {
+			// 	tfidf.addDocument(tweets[i].text);
+			// };
 
 			// Loop through tweets
 			for (var i = 0; i < tweets.length; i++) {
