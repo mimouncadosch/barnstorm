@@ -198,7 +198,6 @@ myModule.factory('Dates', function($http){
       return formattedDate;
     }
   }
-
 });
 
         // var markerArray = [];
