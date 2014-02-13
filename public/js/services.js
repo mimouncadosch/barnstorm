@@ -104,7 +104,7 @@ myModule.factory('GoogleMap', function($http){
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
-          infowindow.setContent(tweets[i].text);
+          infowindow.setContent(contentString);
           infowindow.open(map, marker);
         }
       })(marker, i));
