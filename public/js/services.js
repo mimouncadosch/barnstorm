@@ -34,7 +34,6 @@ myModule.factory('GoogleMap', function($http){
 
             return map;
 		},
-
     fillMap: function(tweets, map){
 
       var locations = [];
