@@ -58,6 +58,7 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 				datesArray.push(myDate);
 				// console.log("tweets[i].sentiment" + tweets[i].sentiment);
 			};
+			
 			/**
 			* Drawing function here
 			*/
@@ -71,18 +72,93 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 					pointColor : "rgba(220,220,220,1)",
 					pointStrokeColor : "#fff",
 					data : sentimentArray
-				}
-				// ,
-				// {
-				// 	fillColor : "rgba(151,187,205,0.5)",
-				// 	strokeColor : "rgba(151,187,205,1)",
-				// 	pointColor : "rgba(151,187,205,1)",
-				// 	pointStrokeColor : "#fff",
-				// 	data : [28,48,40,19,96,27,100]
-				// }
-				]
+				}]
+			};
 
+			Line.defaults = {
+							
+				//Boolean - If we show the scale above the chart data			
+				scaleOverlay : false,
+				
+				//Boolean - If we want to override with a hard coded scale
+				scaleOverride : false,
+				
+				//** Required if scaleOverride is true **
+				//Number - The number of steps in a hard coded scale
+				scaleSteps : null,
+				//Number - The value jump in the hard coded scale
+				scaleStepWidth : null,
+				//Number - The scale starting value
+				scaleStartValue : null,
+
+				//String - Colour of the scale line	
+				scaleLineColor : "rgba(0,0,0,.1)",
+				
+				//Number - Pixel width of the scale line	
+				scaleLineWidth : 1,
+
+				//Boolean - Whether to show labels on the scale	
+				scaleShowLabels : true,
+				
+				//Interpolated JS string - can access value
+				scaleLabel : "<%=value%>",
+				
+				//String - Scale label font declaration for the scale label
+				scaleFontFamily : "'Arial'",
+				
+				//Number - Scale label font size in pixels	
+				scaleFontSize : 12,
+				
+				//String - Scale label font weight style	
+				scaleFontStyle : "normal",
+				
+				//String - Scale label font colour	
+				scaleFontColor : "#666",	
+				
+				///Boolean - Whether grid lines are shown across the chart
+				scaleShowGridLines : true,
+				
+				//String - Colour of the grid lines
+				scaleGridLineColor : "rgba(0,0,0,.05)",
+				
+				//Number - Width of the grid lines
+				scaleGridLineWidth : 1,	
+				
+				//Boolean - Whether the line is curved between points
+				bezierCurve : true,
+				
+				//Boolean - Whether to show a dot for each point
+				pointDot : true,
+				
+				//Number - Radius of each point dot in pixels
+				pointDotRadius : 3,
+				
+				//Number - Pixel width of point dot stroke
+				pointDotStrokeWidth : 1,
+				
+				//Boolean - Whether to show a stroke for datasets
+				datasetStroke : true,
+				
+				//Number - Pixel width of dataset stroke
+				datasetStrokeWidth : 2,
+				
+				//Boolean - Whether to fill the dataset with a colour
+				datasetFill : true,
+				
+				//Boolean - Whether to animate the chart
+				animation : true,
+
+				//Number - Number of animation steps
+				animationSteps : 60,
+				
+				//String - Animation easing effect
+				animationEasing : "easeOutQuart",
+
+				//Function - Fires when the animation is complete
+				onAnimationComplete : null
+				
 			}
+
 			var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
 
 	}
@@ -153,109 +229,3 @@ controller('profileCtrl', function ($scope, $http, $location, auth) {
 		$http.get('/api/logout');
 	}
 });
-
-// controller('mapCtrl', function ($rootScope, $scope, $http, $location, auth, GoogleMap) {
-// 	console.log("I'm in Map Controller");
-// 	var map = GoogleMap.createMap();
-
-// 	$scope.$watch('user', function(newValue) {
-// 		if($scope.user) {
-// 			console.log('watch change');
-// 			console.log($scope.user.twitter.username);
-
-// 			$scope.getTweets = function() {
-// 				console.log("calling getTweets in front end");
-// 				$http({
-// 					method: 'GET',
-// 					url: '/api/db'
-// 						// params: {
-// 						// 	username : $scope.user.twitter.username
-// 						// }
-// 					}).success(function (data, status, headers, config) {
-// 						console.log("Tweet Location: ");
-// 						console.log(data);
-// 						GoogleMap.populateMap(data, map);
-
-// 						//console.log($scope.tweets);
-// 					}).error(function (data, status, headers, config) {
-// 						console.log("error");
-// 						// console.log(data);
-// 					});			
-// 				}
-// 				$scope.getTweets();
-// 			}
-// 		});
-
-
-
-// });
-
-
-
-
-// var margin = {top: 30, right: 30, bottom: 30, left: 40},
-// 			    width = 700 - margin.left - margin.right,
-// 			    height = 450 - margin.top - margin.bottom;
-
-
-// 			var x = d3.time.scale()
-// 			    .range([0, width])
-
-// 			var y = d3.scale.linear()
-// 			    .range([height, 0]);
-
-// 			var xAxis = d3.svg.axis()
-// 			    .scale(x)
-// 			    .orient("bottom");
-
-// 			var yAxis = d3.svg.axis()
-// 			    .scale(y)
-// 			    .orient("left");
-
-// 			var line = d3.svg.line()
-// 			    .x(function(d) { return x(d.date); })
-// 			    .y(function(d) { return y(d.close); });
-
-// 			var svg = d3.select("#graph").append("svg")
-// 			    .attr("width", width + margin.left + margin.right)
-// 			    .attr("height", height + margin.top + margin.bottom)
-// 			  	.append("g")
-// 			    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-// 			  var data = tweets.map(function(d) {
-// 			  	//Fri Feb 07 21:17:24 +0000 2014
-// 			  	// "2014-02-08T09:26:37.000Z"
-// 			  	// var format = d3.time.format("%a %b %d %H:%M:%S %Z %Y"); // "%a %b %d %H:%M:%S %Z %Y
-// 			  	//console.log(format.parse(d.created_at));
-// 			  	//console.log(format.parse("Fri Feb 07 21:17:24 +0000 2014"));
-// 			      return {
-// 			         // date: format.parse(d.created_at),  //
-// 			         date : new Date(d.created_at),
-// 			         close: d.sentiment
-// 			      };
-			      
-// 			  });
-
-// 			    x.domain(d3.extent(data, function(d) { return d.date; }));
-// 			  y.domain(d3.extent(data, function(d) { return d.close; }));
-
-// 			  svg.append("g")
-// 			      .attr("class", "x axis")
-// 			      .attr("transform", "translate(0," + height + ")")
-// 			      .call(xAxis);
-
-// 			  svg.append("g")
-// 			      .attr("class", "y axis")
-// 			      .call(yAxis)
-// 			    .append("text")
-// 			      .attr("transform", "rotate(-90)")
-// 			      .attr("y", 6)
-// 			      .attr("dy", ".71em")
-// 			      .style("text-anchor", "end")
-// 			      .text("Sentiment");
-
-// 			  svg.append("path")
-// 			      .datum(data)
-// 			      .attr("class", "line")
-// 			      .attr("d", line);
-// 			  }
