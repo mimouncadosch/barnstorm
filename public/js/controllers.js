@@ -75,7 +75,7 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 				}]
 			};
 
-			Line.defaults = {
+			var defaults = {
 							
 				//Boolean - If we show the scale above the chart data			
 				scaleOverlay : false,
@@ -159,7 +159,7 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 				
 			}
 
-			var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
+			var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData, defaults);
 
 	}
 	
