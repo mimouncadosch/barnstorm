@@ -34,43 +34,6 @@ myModule.factory('GoogleMap', function($http){
 
             return map;
 		},
-		populateMap: function(tweets, map){
-
-			//console.log(tweets);
-			var locations = [];
-      var markers = [];
-      var infowindows = [];
-
-			for (var i = 0; i < tweets.length; i++) {
-           console.log(tweets[i]);
-          if(tweets[i].coordinates){
-
-              var myLatLng = new google.maps.LatLng(tweets[i].coordinates.lat, tweets[i].coordinates.lng);
-              var marker = new google.maps.Marker({
-                position: myLatLng,
-                map: map,
-              });
-             
-              var contentString =  
-              '<div id="infoWindow">'+
-              '<p>'+ tweets[i].text + '</p>'+
-              '<p>'+ tweets[i].user.screen_name + '</p>'+
-              '<p>'+ tweets[i].user.followers_count + '</p>'+
-              '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
-              + '<button ng-click="reply()">reply</button>'
-              + '</div>';
-
-              // '<h2>' + locations[i].user.followers_count + '</h2>'+
-                      
-              var infowindow = new google.maps.InfoWindow({
-                content: contentString
-              });
-              google.maps.event.addListener(marker, 'click', function() {
-                infowindow.open(map,marker);
-              });
-          }
-			};
-		},
 
     fillMap: function(tweets, map){
 
@@ -104,6 +67,15 @@ myModule.factory('GoogleMap', function($http){
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
+          var contentString =  
+              '<div id="infoWindow">'+
+              '<p>'+ tweets[i].text + '</p>'+
+              '<p>'+ tweets[i].user.screen_name + '</p>'+
+              '<p>'+ tweets[i].user.followers_count + '</p>'+
+              '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
+              + '<button ng-click="reply()">reply</button>'
+              + '</div>';
+
           infowindow.setContent(contentString);
           infowindow.open(map, marker);
         }
