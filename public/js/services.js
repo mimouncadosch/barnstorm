@@ -19,7 +19,7 @@ myModule.factory('auth', ['$rootScope', '$http', '$location', function($rootScop
  //  return isLoggedin();
 }]);
 
-myModule.factory('GoogleMap', function($http){
+myModule.factory('GoogleMap', function($http, $compile){
 	return {
 		createMap: function () {	
 			console.log("I'm calling GoogleMap in services");
@@ -34,8 +34,7 @@ myModule.factory('GoogleMap', function($http){
 
             return map;
 		},
-    fillMap: function(tweets, map){
-
+    fillMap: function(scope, tweets, map){
       var locations = [];
       for (var i = 0; i < tweets.length; i++) {
         locations.push(tweets[i].coordinates);
@@ -61,21 +60,23 @@ myModule.factory('GoogleMap', function($http){
             });
         }
 
-
       markers.push(marker);
+
+      var content =  
+        '<div id="infoWindow">'+
+        '<p>'+ tweets[i].text + '</p>'+
+        '<p>'+ tweets[i].user.screen_name + '</p>'+
+        '<p>'+ tweets[i].user.followers_count + '</p>'+
+        '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
+        + '<button ng-click="replyTweet()">reply</button>'
+        + '</div>';
+      var compiled = $compile(content)(scope);
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
-          var contentString =  
-              '<div id="infoWindow">'+
-              '<p>'+ tweets[i].text + '</p>'+
-              '<p>'+ tweets[i].user.screen_name + '</p>'+
-              '<p>'+ tweets[i].user.followers_count + '</p>'+
-              '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
-              + '<button ng-click="reply()">reply</button>'
-              + '</div>';
-
-          infowindow.setContent(contentString);
+          console.log(scope);
+          //scope.$apply();
+          infowindow.setContent(compiled[0]);
           infowindow.open(map, marker);
         }
       })(marker, i));
