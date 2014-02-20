@@ -23,7 +23,7 @@ controller('landingCtrl', function ($scope, $http) {
 
 
 	}).
-controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth, GoogleMap, Dates) {
+controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $location, auth, GoogleMap, Dates) {
 	
 	
 	$scope.getTweets = function() {
@@ -165,11 +165,19 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 			        // data returns details about the point hovered, such as x and y position and index, as
 			        // well as details about the hover event in data.event
 			        // You can do whatever you like here, but here is a sample implementation of a tooltip
-			        var active_value = sentimentArray[data.point.dataPointIndex];
+			        var active_sentiment = sentimentArray[data.point.dataPointIndex];
 			        var active_date = datesArray[data.point.dataPointIndex];
 			        var active_tweet = tweetsArray[data.point.dataPointIndex];
-			        // For details about where this tooltip came from, read below
-			        $('#tooltip').html(active_date + " - " + active_value + " - " + active_tweet).css("position", "absolute").css("left", data.point.x-17).css("top", data.point.y-55).css("display", 'block');
+
+			        var content = '<div>' + 
+			        '<p>“' + active_tweet + '”</p>' +
+			        '<p><strong> Sentiment </strong>: ' + active_sentiment + '</p>' + 
+			        '<p>' + active_date + '</p>' + 
+			        '<button ng-click="replyTweet()">reply</button>' + 
+			        '</div>';
+			    	var compiled = $compile(content)($scope);
+			    	console.log(compiled[0]);
+			        $('#tooltip').html(compiled[0]).css("position", "absolute").css("left", data.point.x-17).css("top", data.point.y-55).css("display", 'block');
 			    },
 			    mouseout: function (data) {
 				    // Hide the tooltip
@@ -186,6 +194,19 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 	
 	$scope.getTweets();
 	
+		$scope.replyTweet = function() {
+			console.log("replying to tweets");
+			$http({
+				method: 'POST',
+				url: '/reply',
+				params: $scope.reply
+			}).success(function (data, status, headers, config) {
+				console.log(data);
+			}).error(function (data, status, headers, config) {
+				console.log(data);
+			});		
+
+		}
 
 	
 

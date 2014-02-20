@@ -67,9 +67,9 @@ myModule.factory('GoogleMap', function($http, $compile){
         '<p>'+ tweets[i].text + '</p>'+
         '<p>'+ tweets[i].user.screen_name + '</p>'+
         '<p>'+ tweets[i].user.followers_count + '</p>'+
-        '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
-        + '<button ng-click="replyTweet()">reply</button>'
-        + '</div>';
+        '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>' +
+        '<button ng-click="replyTweet()">reply</button>' + 
+        '</div>';
       var compiled = $compile(content)(scope);
 
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
