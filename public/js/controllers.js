@@ -47,23 +47,27 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 			// console.log(Dates.formatDate(tweets[0].created_at));
 
 			var sentimentArray = [];
-			for (var i = 0; i < tweets.length; i++) {
+			var length = tweets.length;
+
+			for (var i = 0; i < length; i++) {
+				// var j = length - i - 1;
 				sentimentArray.push(tweets[i].sentiment);
 				// console.log("tweets[i].sentiment" + tweets[i].sentiment);
 			};
 
 			var datesArray = [];
-			for (var i = 0; i < tweets.length; i++) {
+			for (var i = 0; i < length; i++) {
 				var myDate = Dates.formatDate(tweets[i].created_at);
 				datesArray.push(myDate);
 				// console.log("tweets[i].sentiment" + tweets[i].sentiment);
 			};
 
 			var tweetsArray = [];
-			for (var i = tweets.length - 1; i >= 0; i--) {
+			for (var i = 0; i < length; i++) {
+				// var j = length - i - 1;
 				tweetsArray.push(tweets[i].text);
 			};
-			
+		
 			/**
 			* Drawing function here
 			*/
