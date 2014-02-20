@@ -35,17 +35,17 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 			console.log('success');
 			console.log(data);
 			draw(data);
-	
+
 		}).error(function (data, status, headers, config) {
 			console.log(data);
 		});			
 	}
 
 	function draw(tweets){
-			console.log("Calling draw tweets");
+		console.log("Calling draw tweets");
 
 			// console.log(Dates.formatDate(tweets[0].created_at));
-	
+
 			var sentimentArray = [];
 			for (var i = 0; i < tweets.length; i++) {
 				sentimentArray.push(tweets[i].sentiment);
@@ -58,25 +58,18 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 				datesArray.push(myDate);
 				// console.log("tweets[i].sentiment" + tweets[i].sentiment);
 			};
+
+			var tweetsArray = [];
+			for (var i = tweets.length - 1; i >= 0; i--) {
+				tweetsArray.push(tweets[i].text);
+			};
 			
 			/**
 			* Drawing function here
 			*/
 
-			var lineChartData = {
-				labels : datesArray,
-				datasets : [
-				{
-					fillColor : "rgba(220,220,220,0.5)",
-					strokeColor : "rgba(220,220,220,1)",
-					pointColor : "rgba(220,220,220,1)",
-					pointStrokeColor : "#fff",
-					data : sentimentArray
-				}]
-			};
-
 			var defaults = {
-							
+
 				//Boolean - If we show the scale above the chart data			
 				scaleOverlay : false,
 				
@@ -159,7 +152,35 @@ controller('dashboardCtrl', function ($rootScope, $scope, $http, $location, auth
 				
 			}
 
-			var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData, defaults);
+			var lineChartData = {
+				labels : datesArray,
+				datasets : [
+				{
+					fillColor : "rgba(220,220,220,0.5)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					data : sentimentArray,
+					mouseover: function(data) {
+			        // data returns details about the point hovered, such as x and y position and index, as
+			        // well as details about the hover event in data.event
+			        // You can do whatever you like here, but here is a sample implementation of a tooltip
+			        var active_value = sentimentArray[data.point.dataPointIndex];
+			        var active_date = datesArray[data.point.dataPointIndex];
+			        var active_tweet = tweetsArray[data.point.dataPointIndex];
+			        // For details about where this tooltip came from, read below
+			        $('#tooltip').html(active_date + " - " + active_value + " - " + active_tweet).css("position", "absolute").css("left", data.point.x-17).css("top", data.point.y-55).css("display", 'block');
+			    },
+			    mouseout: function (data) {
+				    // Hide the tooltip
+				    $('#tooltip').html("").css("display", "none");
+				}
+			}]
+		};
+
+		var ctx = document.getElementById("canvas").getContext("2d");
+		var chart = new Chart(ctx).Line(lineChartData, defaults);
+		// var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData, defaults);
 
 	}
 	
@@ -212,7 +233,7 @@ controller('mapCtrl', function ($rootScope, $scope, $http, $location, auth, Goog
 
 	}
 	
-		$scope.getTweets();
+	$scope.getTweets();
 	
 
 
