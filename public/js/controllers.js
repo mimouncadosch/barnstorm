@@ -50,7 +50,6 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 			var length = tweets.length;
 
 			for (var i = 0; i < length; i++) {
-				// var j = length - i - 1;
 				sentimentArray.push(tweets[i].sentiment);
 				// console.log("tweets[i].sentiment" + tweets[i].sentiment);
 			};
@@ -64,10 +63,14 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 
 			var tweetsArray = [];
 			for (var i = 0; i < length; i++) {
-				// var j = length - i - 1;
 				tweetsArray.push(tweets[i].text);
 			};
 		
+			var usersArray = [];
+			for (var i = 0; i < length; i++) {
+				usersArray.push(tweets[i].user.screen_name);
+			};
+
 			/**
 			* Drawing function here
 			*/
@@ -163,7 +166,7 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 					fillColor : "rgba(220,220,220,0.5)",
 					strokeColor : "rgba(220,220,220,1)",
 					pointColor : "rgba(220,220,220,1)",
-					pointStrokeColor : "#fff",
+					pointStrokeColor : "#FFFFFF",
 					data : sentimentArray,
 					mouseover: function(data) {
 			        // data returns details about the point hovered, such as x and y position and index, as
@@ -172,12 +175,15 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 			        var active_sentiment = sentimentArray[data.point.dataPointIndex];
 			        var active_date = datesArray[data.point.dataPointIndex];
 			        var active_tweet = tweetsArray[data.point.dataPointIndex];
+			        var active_user = usersArray[data.point.dataPointIndex];
 
 			        var content = '<div>' + 
 			        '<p>“' + active_tweet + '”</p>' +
 			        '<p><strong> Sentiment </strong>: ' + active_sentiment + '</p>' + 
 			        '<p>' + active_date + '</p>' + 
-			        '<button ng-click="replyTweet()">reply</button>' + 
+			        '<p><strong> User: </strong>' + active_user + '</p>' + 
+			        '<input ng-model="reply.text" type="text"></input>'
+			        '<button ng-click="replyTweet($index)">reply</button>' + 
 			        '</div>';
 			    	var compiled = $compile(content)($scope);
 			    	console.log(compiled[0]);
@@ -197,20 +203,29 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 	}
 	
 	$scope.getTweets();
-	
-		$scope.replyTweet = function() {
-			console.log("replying to tweets");
-			$http({
-				method: 'POST',
-				url: '/reply',
-				params: $scope.reply
-			}).success(function (data, status, headers, config) {
-				console.log(data);
-			}).error(function (data, status, headers, config) {
-				console.log(data);
-			});		
 
-		}
+	$scope.reply = {};
+
+	
+	$scope.replyTweet = function(text) {
+		console.log("replying to tweets");
+		console.log(text);
+		$scope.reply.username = username;
+		$scope.reply.text = text;
+		$http({
+			method: 'POST',
+			url: '/reply',
+			params: {
+				username: user, 
+				text: text
+			}
+		}).success(function (data, status, headers, config) {
+			console.log(data);
+		}).error(function (data, status, headers, config) {
+			console.log(data);
+		});		
+
+	}
 
 	
 
@@ -239,10 +254,10 @@ controller('mapCtrl', function ($rootScope, $scope, $http, $location, auth, Goog
 
 
 
-	console.log("reply text");
+
 	$scope.reply = {username: 'freeslugs'};
 	//console.log($scope.reply.text);
-	//$scope.reply.text = 'I like your policies';
+	$scope.reply.text = 'I like your policies';
 
 	$scope.replyTweet = function() {
 		console.log("replying to tweets");
