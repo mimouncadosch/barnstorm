@@ -261,14 +261,17 @@ function getTweetsFromDB(req, res) {
 
 function replyTweet(req, res){
 
-	console.log(req.params);
+	console.log("Calling reply tweet");
+	// console.log(req);
+	var username = req.query.screen_name;
+	var text = req.query.text;
 	// console.log(req);
 	// console.log(req.param('username'));
 	// console.log(req.param('text'));
-	// T.post('statuses/update', { status: req.param('username') +  " " + req.param('text')}, function(err, reply) {
- // 		//...
- 		// console.log("response sent");
-	// })
+	T.post('statuses/update', { status: "@" + username + " " + text}, function(err, reply) {
+ 		//...
+ 		console.log("response sent");
+	})
 
 }
 

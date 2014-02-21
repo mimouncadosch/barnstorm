@@ -136,7 +136,7 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 					'<p>“' + $scope.tweets[index].text + '”</p>' +
 					'<p>Sentiment: ' + $scope.tweets[index].sentiment + '</p>' + 
 					'<p>' + datesArray[index] + '</p>' + 
-					'<button class="btn btn-default btn-sm" ng-click="replyTweet('+index+')">reply</button>' + 
+					'<button class="btn btn-default btn-sm" ng-click="replyTweet(text,'+index+')">reply</button>' + 
 					'</div>';
 					var compiled = $compile(content)($scope);
 					
@@ -171,15 +171,20 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 
 	$scope.reply = {};
 
-	$scope.replyTweet = function(index) {
-		console.log("replying to tweets");
-		console.log(index);
-		
+	$scope.replyTweet = function(text, index) {
+
+		$scope.reply.screen_name = $scope.tweets[index].user.screen_name;
+		$scope.reply.text = "I love 'Murica";
+
+		console.log($scope.reply.screen_name);
+		console.log($scope.reply.text);
+
 		$http({
 			method: 'POST',
 			url: '/reply',
 			params: $scope.reply
 		}).success(function (data, status, headers, config) {
+			window.alert("Success! Your response to " + $scope.reply.screen_name + " was sent");
 			console.log(data);
 		}).error(function (data, status, headers, config) {
 			console.log(data);
