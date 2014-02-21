@@ -269,8 +269,7 @@ function replyTweet(req, res){
 	// console.log(req.param('username'));
 	// console.log(req.param('text'));
 	T.post('statuses/update', { status: "@" + username + " " + text}, function(err, reply) {
- 		//...
- 		console.log("response sent");
+ 		res.send("response sent");
 	})
 
 }

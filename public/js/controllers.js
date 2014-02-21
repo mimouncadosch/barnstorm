@@ -136,7 +136,7 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 					'<p>“' + $scope.tweets[index].text + '”</p>' +
 					'<p>Sentiment: ' + $scope.tweets[index].sentiment + '</p>' + 
 					'<p>' + datesArray[index] + '</p>' + 
-					'<form class="form" ng-sumbit="(text,'+index+')">' + 
+					'<form class="form" ng-submit="replyTweet(text,'+index+')">' + 
 						'<input class="" ng-model="text"></input>' +
 						'<button class="btn btn-default btn-sm">tweet</button>' + 
 					'</form>' +
@@ -175,9 +175,11 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 	$scope.reply = {};
 
 	$scope.replyTweet = function(text, index) {
+		console.log(text);
+		console.log(index);
 
 		$scope.reply.screen_name = $scope.tweets[index].user.screen_name;
-		$scope.reply.text = "I love 'Murica";
+		$scope.reply.text = text;
 
 		console.log($scope.reply.screen_name);
 		console.log($scope.reply.text);
