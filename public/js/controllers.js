@@ -135,7 +135,10 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 					'<p>“' + $scope.tweets[index].text + '”</p>' +
 					'<p>Sentiment: ' + $scope.tweets[index].sentiment + '</p>' + 
 					'<p>' + datesArray[index] + '</p>' + 
-					'<button class="btn btn-default btn-sm" ng-click="replyTweet('+index+')">reply</button>' + 
+					'<form class="form" ng-sumbit="(text,'+index+')">' + 
+						'<input class="" ng-model="text"></input>' +
+						'<button class="btn btn-default btn-sm">tweet</button>' + 
+					'</form>' +
 					'</div>';
 					var compiled = $compile(content)($scope);
 					
