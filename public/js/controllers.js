@@ -232,16 +232,16 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 		// 	//Boolean - Whether to animate the chart
 		// 	animation : true,
 
-		// 	//Number - Number of animation steps
-		// 	animationSteps : 60,
+			//Number - Number of animation steps
+			animationSteps : 60,
 			
-		// 	//String - Animation easing effect
-		// 	animationEasing : "easeOutQuart",
+			//String - Animation easing effect
+			animationEasing : "easeOutQuart",
 
-		// 	//Function - Fires when the animation is complete
-		// 	onAnimationComplete : null
+			//Function - Fires when the animation is complete
+			onAnimationComplete : null
 			
-		// }
+		}
 
 		var lineChartData = {
 			labels : datesArray,
