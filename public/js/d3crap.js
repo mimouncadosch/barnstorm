@@ -1,4 +1,83 @@
-var parsedDates = [];
+
+
+
+        // var markerArray = [];
+        // var windowArray = [];
+        // var contentArray = [];
+
+        // for (var i = 0; i < tweets.length; i++) {
+        //     if(tweets[i].user.coordinates){
+
+        //       var myLatLng = new google.maps.LatLng(tweets[i].user.coordinates.lat, tweets[i].user.coordinates.lng);
+        //       var marker = new google.maps.Marker({
+        //           position: myLatLng,
+        //           map: map,
+        //       });
+        //       markerArray.push(marker);
+        //     }
+
+        //   var contentString =  
+        //       '<div id="infoWindow">'+
+        //       '<p>'+ tweets[i].text + '</p>'+
+        //       '<p>'+ tweets[i].user.screen_name + '</p>'+
+        //       '<p>'+ tweets[i].user.followers_count + '</p>'+
+        //       '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>'
+        //       + '</div>';
+        //   contentArray.push(contentString);
+
+        //   var infoWindow = new google.maps.InfoWindow({
+        //         content: contentString
+        //   });
+
+        //   windowArray.push(infoWindow);
+
+        // }
+
+        // for (var i = 0; i < tweets.length; i++) {
+        //   // console.log("markerArray[i]");
+        //   // console.log(markerArray[i]);
+        //   // console.log("contentArray[i]");
+        //   // console.log(contentArray[i]);
+        //   // console.log("windowArray[i]");
+        //   // console.log(windowArray[i]);
+
+
+        // };
+
+
+        // for (var i = 0; i < tweets.length; i++) {
+        //   google.maps.event.addListener(markerArray[i], 'click', function() {
+        //         windowArray[i].open(map,markerArray[i]);
+        //       });
+        // };
+
+
+
+       // var markers = [];
+       // var infowindows = [];
+
+       //      // add shops or malls
+       //      for (var key in tweets) {
+       //        if (tweets[key].user.coordinates){
+       //            infowindows[key] = new google.maps.InfoWindow({
+       //            content: tweets[key].infowindow
+       //          });
+
+       //          markers[key] = new google.maps.Marker({
+       //            position: new google.maps.LatLng(tweets[key].user.coordinates.lat, tweets[key].user.coordinates.lng),
+       //            map: map,
+       //            title: tweets[key].text
+       //          });
+       //          // var iconFile = 'http://maps.google.com/mapfiles/ms/icons/'+marker_color+'-dot.png';
+       //          // markers[key].setIcon(iconFile);
+
+       //          google.maps.event.addListener(markers[key], 'click', function(innerKey) {
+       //            return function() {
+       //              infowindows[innerKey].open(map, markers[innerKey]);
+       //            }
+       //          }(key));
+       //        }
+       //      }var parsedDates = [];
 			for (var i = 0; i < data.length; i++) {
 
 				var db_date = data[i].created_at;

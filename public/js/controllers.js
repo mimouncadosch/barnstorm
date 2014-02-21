@@ -20,6 +20,7 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 			url: '/api/db'
 		}).success(function (data, status, headers, config) {
 			$scope.tweets = data;
+			console.log(data);
 			draw();
 		}).error(function (data, status, headers, config) {
 			console.log(data);
@@ -157,18 +158,12 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 		// pointing parent container to make chart js inherit its width
 		var container = $('#canvas').parent();
 
-		// enable resizing matter
-		//$(window).resize( generateChart );
-
-		function generateChart(){
-			// make chart width fit with its container
-			var ww = $('#canvas').attr('width', $(container).width() );
-			var ww = $('#canvas').attr('height', 400 );
-			// Initiate new chart or Redraw
-			new Chart(ctx).Line(lineChartData, defaults);
-		};
-
-		generateChart();
+		// make chart width fit with its container
+		var ww = $('#canvas').attr('width', $(container).width() );
+		var ww = $('#canvas').attr('height', 400 );
+		// Initiate new chart or Redraw
+		new Chart(ctx).Line(lineChartData, defaults);
+	
 
 	}
 	
