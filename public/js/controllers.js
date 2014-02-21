@@ -53,7 +53,7 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 			scaleStartValue : null,
 
 			//String - Colour of the scale line	
-			scaleLineColor : "rgba(0,0,0,.1)",
+			scaleLineColor : "rgba(0,0,0,.25)",
 			
 			//Number - Pixel width of the scale line	
 			scaleLineWidth : 1,
@@ -74,13 +74,13 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 			scaleFontStyle : "normal",
 			
 			//String - Scale label font colour	
-			scaleFontColor : "#666",	
+			scaleFontColor : "#fff",	
 			
 			///Boolean - Whether grid lines are shown across the chart
 			scaleShowGridLines : true,
 			
 			//String - Colour of the grid lines
-			scaleGridLineColor : "rgba(0,0,0,.05)",
+			scaleGridLineColor : "rgba(0,0,0,.1)",
 			
 			//Number - Width of the grid lines
 			scaleGridLineWidth : 1,	
