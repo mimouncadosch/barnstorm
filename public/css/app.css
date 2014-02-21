@@ -7,7 +7,11 @@ body {
   font-family: 'Fauna One';
   color: black;
 }
-/*  background: url() no-repeat center center fixed; 
+
+a,a:hover {
+  text-decoration: none;
+}
+/* background: url() no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -56,6 +60,22 @@ body {
 .masthead-brand, .lead, tbody, td, tr, h2, h1, h3 {
   color: white;
 }
+
+#tooltip {
+  position: absolute;
+  display: block;
+  min-width: 200px;
+  max-width: 250px;
+  padding: 10px;
+  background: rgba(255,255,255,.7);
+}
+
+#tooltip p {
+  margin: 5px 0;
+  line-height: 100%;
+  font-size: small;
+  text-shadow: none;
+}
 /*.cover-container {
   color: white;
 }
@@ -69,38 +89,3 @@ body {
 /*#price-table tr td {
     font-size: 50px;
   }*/
-
-
-/* d3 graph display */
-
-/* tell the SVG path to be a thin blue line without any area fill */
-path {
-  stroke: white;
-  stroke-width: 1;
-  fill: none;
-}
- 
-.axis {
-  shape-rendering: crispEdges;
-  stroke: lightgrey;
-}
-
-.x.axis line {
-  stroke: lightgrey;
-}
-
-.x.axis .minor {
-  stroke-opacity: .5;
-  stroke: lightgrey;
-}
-
-.x.axis path {
-  display: none;
-  stroke: lightgrey;
-}
-
-.y.axis line, .y.axis path {
-  fill: none;
-  /*stroke: #000;*/
-  stroke: lightgrey;
-}
