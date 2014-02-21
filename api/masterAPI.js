@@ -254,11 +254,6 @@ function getTweetsFromDB(req, res) {
 	});
 }
 
-
-
-/***************** end of work by gilad **********************/
-
-
 function replyTweet(req, res){
 
 	console.log("Calling reply tweet");
@@ -273,6 +268,9 @@ function replyTweet(req, res){
 	})
 
 }
+
+/***************** end of work by gilad **********************/
+
 
 function termImportance(req, res){
 	var TfIdf = natural.TfIdf;
