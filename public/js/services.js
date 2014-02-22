@@ -62,20 +62,19 @@ myModule.factory('GoogleMap', function($http, $compile){
 
       markers.push(marker);
 
-      var content =  
-        '<div id="infoWindow">'+
-        '<p>'+ tweets[i].text + '</p>'+
-        '<p>'+ tweets[i].user.screen_name + '</p>'+
-        '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>' +
-        '<form class="form" ng-submit="replyTweet(text,'+index+')">' + 
-          '<input class="" ng-model="text"></input>' +
-          '<button class="btn btn-default btn-sm">tweet</button>' + 
-        '</form>' +
-        '</div>';
-      var compiled = $compile(content)(scope);
-
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
+          var content =  
+            '<div id="infoWindow">'+
+            '<p>'+ tweets[i].text + '</p>'+
+            '<p>'+ tweets[i].user.screen_name + '</p>'+
+            '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>' +
+            '<form class="form" ng-submit="replyTweet(text,'+i+')">' + 
+              '<input class="" ng-model="text"></input>' +
+              '<button class="btn btn-default btn-sm">tweet</button>' + 
+            '</form>' +
+            '</div>';
+          var compiled = $compile(content)(scope);
           console.log(scope);
           //scope.$apply();
           infowindow.setContent(compiled[0]);
