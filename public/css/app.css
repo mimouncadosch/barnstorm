@@ -6,6 +6,11 @@
 body { 
   font-family: 'Fauna One';
   color: black;
+  background: url('../img/background.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 a,a:hover {
@@ -13,6 +18,11 @@ a,a:hover {
 }
 .lead-smaller {
   font-size: 14px;
+}
+
+#twitter_icon {
+  height: 50px;
+  width: 50px;
 }
 /* background: url() no-repeat center center fixed; 
   -webkit-background-size: cover;

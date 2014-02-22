@@ -69,6 +69,8 @@ app.use("/js", express.static(__dirname + "/public/js"));
 app.use("/css", express.static(__dirname + "/public/css"));
 app.use("/partials", express.static(__dirname + "/public/partials"));
 app.use("/lib", express.static(__dirname + "/public/lib"));
+app.use("/img", express.static(__dirname + "/public/img"));
+app.use("/fonts", express.static(__dirname + "/public/fonts"));
 
 
 // load user API and pass in our express app and fully configured passport
