@@ -5,7 +5,7 @@
 
 body { 
   font-family: 'Fauna One';
-  color: black;
+  /*color: black;*/
 }
 
 .bg-img {
@@ -108,10 +108,10 @@ a,a:hover {
   font-size: small;
   text-shadow: none;
 }
-/*.cover-container {
+.cover-container {
   color: white;
 }
-*/
+
 
 /*#infoWindow {
   height: 300px;

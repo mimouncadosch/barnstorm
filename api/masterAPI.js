@@ -45,43 +45,43 @@ module.exports = {
 /**
  * creates a cron job, every minute
  */
-new cronJob('0 * * * * *', function() {
-	// find all users
-	User.find({}, function(err, users) {
-		// error handling
-		if (err){
-			return done(err);
-		}
-		else{
-			// async loop for each user
-			async.forEachSeries(users, function(user, cb1) {				
-				console.log('get tweets ' + user.twitter.username);
-				// get the tweets for each user
-				getTweets(user.twitter.username, function(tweetArray) {
-					// for each tweet, anaylze sentiment and get coordinates
-					async.forEachSeries(tweetArray, function(tweet, cb2) {
-						// anaylze sentiment, nlp
-						getSentiment(tweet.text, function(score) {
-							tweet.sentiment = score;
-							// get coordinates of person who tweeted
-							getCoordinates(tweet.user.location, function(coordinates) {
-								tweet.coordinates = coordinates;
-								// if its a recent tweet save 
-								saveTweet(tweet, function() {
-									// callback for the inner loop
-									cb2();
-								});
-							});								
-						});
-					}, function() {
-						// callback for the outer loop
-						cb1();
-					});			
-				});
-			});
-		} //else
-	});	// user find
-}, null, true);	
+// new cronJob('0 * * * * *', function() {
+// 	// find all users
+// 	User.find({}, function(err, users) {
+// 		// error handling
+// 		if (err){
+// 			return done(err);
+// 		}
+// 		else{
+// 			// async loop for each user
+// 			async.forEachSeries(users, function(user, cb1) {				
+// 				console.log('get tweets ' + user.twitter.username);
+// 				// get the tweets for each user
+// 				getTweets(user.twitter.username, function(tweetArray) {
+// 					// for each tweet, anaylze sentiment and get coordinates
+// 					async.forEachSeries(tweetArray, function(tweet, cb2) {
+// 						// anaylze sentiment, nlp
+// 						getSentiment(tweet.text, function(score) {
+// 							tweet.sentiment = score;
+// 							// get coordinates of person who tweeted
+// 							getCoordinates(tweet.user.location, function(coordinates) {
+// 								tweet.coordinates = coordinates;
+// 								// if its a recent tweet save 
+// 								saveTweet(tweet, function() {
+// 									// callback for the inner loop
+// 									cb2();
+// 								});
+// 							});								
+// 						});
+// 					}, function() {
+// 						// callback for the outer loop
+// 						cb1();
+// 					});			
+// 				});
+// 			});
+// 		} //else
+// 	});	// user find
+// }, null, true);	
 
 /**
  * gets tweets from twitter using twit
