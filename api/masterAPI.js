@@ -11,7 +11,7 @@ var queryString = require('querystring');
 var moment = require('moment');
 var request = require('request');
 var cronJob = require('cron').CronJob;
-moment().format();
+moment().format(); 
 
 //models
 var oauth = require('./models/oauth.js');
