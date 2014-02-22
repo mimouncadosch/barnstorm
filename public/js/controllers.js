@@ -216,6 +216,7 @@ controller('mapCtrl', function ($rootScope, $scope, $http, $location, auth, Goog
 			url: '/api/db'
 		}).success(function (data, status, headers, config) {
 			console.log('success');
+			$scope.tweets = data;
 			GoogleMap.fillMap($scope, data, map);
 			console.log('tweets in map ctrl');
 			console.log(data)
