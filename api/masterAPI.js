@@ -91,6 +91,9 @@ new cronJob('0 * * * * *', function() {
 function getTweets(username, callback){
 	T.get('search/tweets', { q: "to:" + username, count: 3}, function (err, results) {
 		var tweetArray = [];
+		if(!results) {
+			callback(tweetArray);
+		}
 		for (var i = 0; i < results.statuses.length; i++) {
 			var item = results.statuses[i];
 			var tweet = {
@@ -236,7 +239,7 @@ function getTweetsFromDB(req, res) {
 	Tweet.find({}, function (err, tweets) {
 		for (var i = 0; i < tweets.length; i++) {
 		
-			if (tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || (tweets[i].text.indexOf(req.user.twitter.username != -1))) 
+			if (tweets[i].text.indexOf(req.user.twitter.username != -1))  //tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || 
 			{
 				// user mentioned in tweet or user posted him/herself
 				var username = req.user.twitter.username;
