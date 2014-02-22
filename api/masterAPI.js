@@ -93,25 +93,29 @@ function getTweets(username, callback){
 		var tweetArray = [];
 		if(!results) {
 			callback(tweetArray);
+		} 
+		else {
+
+
+			for (var i = 0; i < results.statuses.length; i++) {
+				var item = results.statuses[i];
+				var tweet = {
+					user: {
+						name: item.user.name,
+						screen_name: item.user.screen_name,
+						location: item.user.location,
+						//url: results[i].user.url, 
+						followers_count: item.user.followers_count, 
+						profile_background_image_url: item.user.profile_background_image_url, 
+					},
+					text: item.text,
+					created_at: item.created_at,
+					sentiment: 0
+				};
+				tweetArray.push(tweet);
+			}
+			callback(tweetArray);
 		}
-		for (var i = 0; i < results.statuses.length; i++) {
-			var item = results.statuses[i];
-			var tweet = {
-				user: {
-					name: item.user.name,
-					screen_name: item.user.screen_name,
-					location: item.user.location,
-					//url: results[i].user.url, 
-					followers_count: item.user.followers_count, 
-					profile_background_image_url: item.user.profile_background_image_url, 
-				},
-				text: item.text,
-				created_at: item.created_at,
-				sentiment: 0
-			};
-			tweetArray.push(tweet);
-		}
-		callback(tweetArray);
 	});
 }
 
@@ -242,21 +246,16 @@ function getTweetsFromDB(req, res) {
 		var tweetsArray = [];	
 		Tweet.find({}, function (err, tweets) {
 			for (var i = 0; i < tweets.length; i++) {
-			
-				if (tweets[i].text.indexOf(req.user.twitter.username != -1))  //tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || 
+				if (tweets[i].text.indexOf(req.user.twitter.username) != -1)  //tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || 
 				{
-					// user mentioned in tweet or user posted him/herself
-					var username = req.user.twitter.username;
+					// console.log('This should show ONLY tweets including @Mimoun in the text');
+					// console.log(tweets[i]);
+					tweetsArray.push(tweets[i]);
 
-					if (tweets[i].user.screen_name == username) {
-						tweetsArray.push(tweets[i]);
-					} else if (tweets[i].text.indexOf(username) != -1) {
-						console.log(tweets[i].text.indexOf(username) != -1) ;
-						tweetsArray.push(tweets[i]);
-						// user netither mentioned in tweet or user posted him/herself
-					}
 				}
 			}
+			console.log("tweetsArray");
+			console.log(tweetsArray);
 			res.json(tweetsArray);
 		});	
 	}

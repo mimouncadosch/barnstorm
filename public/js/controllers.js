@@ -20,7 +20,7 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 			url: '/api/db'
 		}).success(function (data, status, headers, config) {
 			$scope.tweets = data;
-			console.log(data);
+			//console.log(data);
 			draw();
 		}).error(function (data, status, headers, config) {
 			console.log(data);
@@ -30,12 +30,21 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 	* Drawing function here
 	*/
 	function draw(){
+		console.log('I am drawing');
+		console.log($scope.tweets);
 		var sentimentArray = [], datesArray = [];
 		for (var i = 0; i < $scope.tweets.length; i++) {
 			var myDate = Dates.formatDate($scope.tweets[i].created_at);
 			sentimentArray.push($scope.tweets[i].sentiment);
 			datesArray.push(myDate);
 		};
+
+		console.log("sentiment Array");
+		console.log(sentimentArray);
+
+		console.log("datesArray");
+		console.log(datesArray);
+
 
 		var defaults = {
 
