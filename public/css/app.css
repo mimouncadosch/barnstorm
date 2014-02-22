@@ -14,6 +14,7 @@ a,a:hover {
 .lead-smaller {
   font-size: 14px;
 }
+
 /* background: url() no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -57,7 +58,13 @@ a,a:hover {
 }
 
 #table_header{
-  font-size: 20px;
+  font-size: 15px;
+}
+.table>tbody>tr>td {
+  vertical-align: middle;  
+}
+.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th {
+  background: rgba(255,255,255,.2);
 }
 
 .masthead-brand, .lead, tbody, td, tr, h2, h1, h3 {
