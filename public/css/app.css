@@ -19,6 +19,7 @@ body {
 #infoWindow
  {
   text-shadow: none;
+  color: black;
 }
 
 a,a:hover {
@@ -85,7 +86,7 @@ a,a:hover {
 .table>tbody>tr>td {
   vertical-align: middle;  
 }
-.table-hover>tbody>tr:hover>td, .table-hover>tbody>tr:hover>th {
+.table-hover>tbody>tr:hover>td, .table-hover>table-hoverody>tr:hover>th {
   background: rgba(255,255,255,.2);
 }
 
