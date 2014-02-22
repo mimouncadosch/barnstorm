@@ -10,7 +10,7 @@ controller('thankyouCtrl', function ($scope, $http) {
 
 }).
 controller('landingCtrl', function ($scope, $http) {
-
+	$('body').addClass('bg-img');
 }).
 controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $location, auth, GoogleMap, Dates) {
 	$scope.getTweets = function() {

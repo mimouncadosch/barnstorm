@@ -6,11 +6,19 @@
 body { 
   font-family: 'Fauna One';
   color: black;
+}
+
+.bg-img {
   background: url('../img/background.jpg') no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+
+#infoWindow
+ {
+  text-shadow: none;
 }
 
 a,a:hover {
@@ -45,6 +53,10 @@ a,a:hover {
 
 .site-wrapper {
   background: rgba(51, 204, 255, .5);
+}
+
+.cover-container {
+  /*background: rgba(120, 120, 120, .4); */
 }
 
 .cover-heading, .masthead-brand {
