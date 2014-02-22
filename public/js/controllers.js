@@ -23,15 +23,15 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 			//console.log(data);
 			draw();
 		}).error(function (data, status, headers, config) {
-			console.log(data);
+			// console.log(data);
 		});			
 	}
 	/**
 	* Drawing function here
 	*/
 	function draw(){
-		console.log('I am drawing');
-		console.log($scope.tweets);
+		// console.log('I am drawing');
+		// console.log($scope.tweets);
 		var sentimentArray = [], datesArray = [];
 		for (var i = 0; i < $scope.tweets.length; i++) {
 			var myDate = Dates.formatDate($scope.tweets[i].created_at);
@@ -39,11 +39,11 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 			datesArray.push(myDate);
 		};
 
-		console.log("sentiment Array");
-		console.log(sentimentArray);
+		// console.log("sentiment Array");
+		// console.log(sentimentArray);
 
-		console.log("datesArray");
-		console.log(datesArray);
+		// console.log("datesArray");
+		// console.log(datesArray);
 
 
 		var defaults = {
@@ -133,7 +133,7 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 		var lineChartData = {
 			labels : datesArray,
 			datasets : [{
-				fillColor : "rgba(220,220,220,0.5)",
+				fillColor : "rgba(255,255,255,0.5)",
 				strokeColor : "rgba(220,220,220,1)",
 				pointColor : "rgba(220,220,220,1)",
 				pointStrokeColor : "#fff",

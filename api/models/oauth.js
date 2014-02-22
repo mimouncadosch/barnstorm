@@ -7,7 +7,7 @@ var ids = {
 	twitter: {
 		consumerKey: 'yxDatKN48oYTeKqOft5ciA',
 		consumerSecret: '9xwrzRwL2D53iXTxNQ8hSQ95TydiJo2n5dGzkBHYXBI',
-		callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
+		callbackURL: "mysterious-reaches-6748.herokuapp.com/auth/twitter/callback"
 	},
 	github: {
 		clientID: 'get_your_own',
