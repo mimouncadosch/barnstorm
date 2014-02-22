@@ -32,10 +32,11 @@ myApp.config(function ($routeProvider, $locationProvider) {
 		}).
 		when('/features', {
 			templateUrl: 'partials/features.html',
-			controller: 'dashboardCtrl'
+			controller: 'landingCtrl'
 		}).
 		when('/contact', {
 			templateUrl: 'partials/contact.html',
+			controller: 'landingCtrl'
 		}).
 		when('/thankyou', {
 			templateUrl: 'partials/thankyou.html',
