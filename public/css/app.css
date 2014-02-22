@@ -16,7 +16,7 @@ body {
   background-size: cover;
 }
 
-#infoWindow
+#infoWindow, #tooltip
  {
   text-shadow: none;
   color: black;
