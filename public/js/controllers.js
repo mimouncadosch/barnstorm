@@ -219,13 +219,22 @@ controller('mapCtrl', function ($rootScope, $scope, $http, $location, auth, Goog
 	//console.log($scope.reply.text);
 	$scope.reply.text = 'I like your policies';
 
-	$scope.replyTweet = function() {
-		console.log("replying to tweets");
+	$scope.replyTweet = function(text, index) {
+		console.log(text);
+		console.log(index);
+
+		$scope.reply.screen_name = $scope.tweets[index].user.screen_name;
+		$scope.reply.text = text;
+
+		console.log($scope.reply.screen_name);
+		console.log($scope.reply.text);
+
 		$http({
 			method: 'POST',
 			url: '/reply',
 			params: $scope.reply
 		}).success(function (data, status, headers, config) {
+			window.alert("Success! Your response to " + $scope.reply.screen_name + " was sent");
 			console.log(data);
 		}).error(function (data, status, headers, config) {
 			console.log(data);

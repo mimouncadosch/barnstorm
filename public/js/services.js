@@ -7,16 +7,16 @@
 // In this case it is a simple value service.
 var myModule = angular.module('myApp.services', []);
 myModule.factory('auth', ['$rootScope', '$http', '$location', function($rootScope, $http, $location) {
- //  function isLoggedin() {
- //  	$http.get('/api/isLoggedin').success(function(data, status, headers, config) {
- //  		$rootScope.user = data;
-	// }).error(function (data, status, headers, config) {
-	// 	if(status == 401) {
-	// 		$location.path('/landing');
-	// 	}
-	// });
- //  }
- //  return isLoggedin();
+  function isLoggedin() {
+  	$http.get('/api/isLoggedin').success(function(data, status, headers, config) {
+  		$rootScope.user = data;
+	}).error(function (data, status, headers, config) {
+		if(status == 401) {
+			$location.path('/landing');
+		}
+	});
+  }
+  return isLoggedin();
 }]);
 
 myModule.factory('GoogleMap', function($http, $compile){
@@ -66,9 +66,11 @@ myModule.factory('GoogleMap', function($http, $compile){
         '<div id="infoWindow">'+
         '<p>'+ tweets[i].text + '</p>'+
         '<p>'+ tweets[i].user.screen_name + '</p>'+
-        '<p>'+ tweets[i].user.followers_count + '</p>'+
         '<p> <strong> Sentiment </strong>' + tweets[i].sentiment + '</p>' +
-        '<button ng-click="replyTweet()">reply</button>' + 
+        '<form class="form" ng-submit="replyTweet(text,'+index+')">' + 
+          '<input class="" ng-model="text"></input>' +
+          '<button class="btn btn-default btn-sm">tweet</button>' + 
+        '</form>' +
         '</div>';
       var compiled = $compile(content)(scope);
 
