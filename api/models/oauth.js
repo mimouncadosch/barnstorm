@@ -7,7 +7,7 @@ var ids = {
 	twitter: {
 		consumerKey: 'yxDatKN48oYTeKqOft5ciA',
 		consumerSecret: '9xwrzRwL2D53iXTxNQ8hSQ95TydiJo2n5dGzkBHYXBI',
-		callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
+		callbackURL: "http://www.barnstormapp.org/auth/twitter/callback"
 	},
 	github: {
 		clientID: 'get_your_own',
