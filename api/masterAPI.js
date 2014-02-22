@@ -233,28 +233,34 @@ function saveTweet(tweet, callback) {
  * @return {Array}     Array of tweets 
  */
 function getTweetsFromDB(req, res) {
-	console.log("req.user");
-	console.log(req.user);
-	var tweetsArray = [];	
-	Tweet.find({}, function (err, tweets) {
-		for (var i = 0; i < tweets.length; i++) {
-		
-			if (tweets[i].text.indexOf(req.user.twitter.username != -1))  //tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || 
-			{
-				// user mentioned in tweet or user posted him/herself
-				var username = req.user.twitter.username;
+	if(!req.user) {
+		console.log('no user');
+		res.redirect('/');
+	} else {
+		console.log("req.user");
+		console.log(req.user);
+		var tweetsArray = [];	
+		Tweet.find({}, function (err, tweets) {
+			for (var i = 0; i < tweets.length; i++) {
+			
+				if (tweets[i].text.indexOf(req.user.twitter.username != -1))  //tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || 
+				{
+					// user mentioned in tweet or user posted him/herself
+					var username = req.user.twitter.username;
 
-				if (tweets[i].user.screen_name == username) {
-					tweetsArray.push(tweets[i]);
-				} else if (tweets[i].text.indexOf(username) != -1) {
-					console.log(tweets[i].text.indexOf(username) != -1) ;
-					tweetsArray.push(tweets[i]);
-					// user netither mentioned in tweet or user posted him/herself
+					if (tweets[i].user.screen_name == username) {
+						tweetsArray.push(tweets[i]);
+					} else if (tweets[i].text.indexOf(username) != -1) {
+						console.log(tweets[i].text.indexOf(username) != -1) ;
+						tweetsArray.push(tweets[i]);
+						// user netither mentioned in tweet or user posted him/herself
+					}
 				}
 			}
-		}
-		res.json(tweetsArray);
-	});
+			res.json(tweetsArray);
+		});	
+	}
+	
 }
 
 function replyTweet(req, res){
