@@ -250,6 +250,7 @@ function getTweetsFromDB(req, res) {
 		Tweet.find({}, function (err, tweets) {
 			if(tweets.length < 3) {
 				T.get('search/tweets', { q: "to:" + username, count: 5}, function (err, results) {
+					console.log("User doesn't have enough tweets. Pull directly from Twitter");
 					Tweet(tweet).save(function (err, tweet) {
 						console.log('saved. TWEET ' + tweet.text); 
 						res.json(results);	
