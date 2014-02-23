@@ -221,10 +221,6 @@ function saveTweet(tweet, callback) {
 	var now = Date.parse(now);
 	var diff = now - tweet_date;
 
-	/**
-	TO DO: CHECK IF TWEET IS IN DATABASE 
-	*/
-
 	if(diff > 120000) {
 		callback();
 	}
@@ -248,13 +244,26 @@ function getTweetsFromDB(req, res) {
 		console.log("req.user");
 		console.log(req.user);
 		var tweetsArray = [];	
+
+
+
 		Tweet.find({}, function (err, tweets) {
+			if(tweets.length < 3) {
+				T.get('search/tweets', { q: "to:" + username, count: 5}, function (err, results) {
+					Tweet(tweet).save(function (err, tweet) {
+						console.log('saved. TWEET ' + tweet.text); 
+						res.json(results);	
+					});
+				});
+			}
+
 			for (var i = 0; i < tweets.length; i++) {
 				if (tweets[i].text.indexOf(req.user.twitter.username) != -1)  //tweets[i].user.screen_name.indexOf(req.user.twitter.username != -1) || 
 				{
 					// console.log('This should show ONLY tweets including @Mimoun in the text');
 					// console.log(tweets[i]);
 					tweetsArray.push(tweets[i]);
+
 
 				}
 			}
