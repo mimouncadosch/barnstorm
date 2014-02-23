@@ -221,10 +221,14 @@ function saveTweet(tweet, callback) {
 	var now = Date.parse(now);
 	var diff = now - tweet_date;
 
-	if(diff > 60000) {
+	/**
+	TO DO: CHECK IF TWEET IS IN DATABASE 
+	*/
+
+	if(diff > 120000) {
 		callback();
 	}
-	else if(diff < 60000){
+	else if(diff < 120000){
 		Tweet(tweet).save(function (err, tweet) {
 			console.log('saved. TWEET ' + tweet.text); 
 			callback();
