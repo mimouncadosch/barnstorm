@@ -248,6 +248,8 @@ function getTweetsFromDB(req, res) {
 
 
 		Tweet.find({}, function (err, tweets) {
+			console.log("Numba of tweets");
+			console.log(tweets.length);
 			if(tweets.length < 3) {
 				T.get('search/tweets', { q: "to:" + username, count: 5}, function (err, results) {
 					console.log("User doesn't have enough tweets. Pull directly from Twitter");
