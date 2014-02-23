@@ -19,6 +19,9 @@ controller('dashboardCtrl', function ($rootScope, $compile, $scope, $http, $loca
 			method: 'GET',
 			url: '/api/db'
 		}).success(function (data, status, headers, config) {
+			if(data.length < 3) {
+				alert('Welcome to Barnstorm! Our servers now work for you, and are gathering all tweets about you. Please visit Barnstorm frequently to track your social media ');
+			}
 			$scope.tweets = data;
 			//console.log(data);
 			draw();
